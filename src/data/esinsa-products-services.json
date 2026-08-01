@@ -1,0 +1,387 @@
+{
+  "site": "Esinsa Gaskets",
+  "url": "https://www.esinsagaskets.com",
+  "categories": [
+    {
+      "id": "juntas-estanqueidad",
+      "name": "Juntas de Estanqueidad",
+      "slug": "/juntas/",
+      "description": "Soluciones de sellado eficientes y seguros para mantener aplicaciones y procesos industriales sin fugas ni pérdidas.",
+      "icon": "juntas",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2025/03/juntas-300x300.png",
+      "featured": true,
+      "order": 1,
+      "subcategories": [
+        {
+          "id": "juntas-metalicas",
+          "name": "Juntas Metálicas",
+          "description": "Diseñadas para aplicaciones de estanqueidad estática en condiciones extremas",
+          "icon": "metal",
+          "types": [
+            {
+              "name": "Juntas Dentadas",
+              "description": "Perfil dentado concéntrico que proporciona un sellado efectivo en aplicaciones de alta presión y temperatura"
+            },
+            {
+              "name": "Juntas RTJ (Ring Type Joint)",
+              "description": "Juntas de anillo metálico para conexiones bridadas en aplicaciones de alta presión"
+            },
+            {
+              "name": "Espirometálicas (Spiral Wound)",
+              "description": "Juntas bobinadas de metal y relleno para aplicaciones críticas"
+            },
+            {
+              "name": "Kammprofile",
+              "description": "Juntas de perfil acanalado con núcleo metálico y revestimiento de grafito o PTFE"
+            }
+          ]
+        },
+        {
+          "id": "juntas-semimetalicas",
+          "name": "Juntas Semi-Metálicas",
+          "description": "Juntas compuestas de materiales metálicos y no metálicos que aportan resistencia y flexibilidad",
+          "icon": "semi-metal",
+          "types": [
+            {
+              "name": "Espirometálicas",
+              "description": "Combinación de metal y relleno flexible para condiciones variables"
+            },
+            {
+              "name": "Juntas de camisa metálica (Metal Jacketed)",
+              "description": "Núcleo interior flexible con cubierta metálica"
+            }
+          ]
+        },
+        {
+          "id": "juntas-no-metalicas",
+          "name": "Juntas No Metálicas",
+          "description": "Apropiadas para aplicaciones tanto de alta como de baja temperatura",
+          "icon": "non-metal",
+          "types": [
+            {
+              "name": "Juntas de Fibra",
+              "description": "Materiales comprimidos de fibra para aplicaciones generales"
+            },
+            {
+              "name": "Juntas de Grafito",
+              "description": "Alta resistencia térmica y química"
+            },
+            {
+              "name": "Juntas de PTFE (Teflón)",
+              "description": "Resistencia química excepcional"
+            },
+            {
+              "name": "Juntas de Elastómero",
+              "description": "Flexibilidad y sellado en aplicaciones dinámicas"
+            },
+            {
+              "name": "Juntas O-Rings",
+              "description": "Sección circular para aplicaciones de sellado estático y dinámico"
+            }
+          ]
+        },
+        {
+          "id": "juntas-medida",
+          "name": "Juntas a Medida",
+          "description": "Sector-specific y application-specific que requieren soluciones a medida y concretas",
+          "icon": "custom",
+          "types": [
+            {
+              "name": "Juntas Planas a Medida",
+              "description": "Cortadas según planos y especificaciones del cliente"
+            },
+            {
+              "name": "Juntas para intercambiadores de calor",
+              "description": "Diseñadas específicamente para equipos de intercambio térmico"
+            }
+          ]
+        }
+      ],
+      "specifications": {
+        "temperature_range": { "min": -20, "max": 250, "unit": "°C" },
+        "max_pressure": { "value": 40, "unit": "bar" },
+        "fluid_compatibility": [
+          "Agua y Vapor",
+          "Aceites e Hidrocarburos",
+          "Ácidos",
+          "Álcalis / Bases",
+          "Productos Alimentarios"
+        ],
+        "materials_available": [
+          "Acero al carbono",
+          "Acero inoxidable",
+          "Aleaciones de níquel",
+          "Grafito",
+          "PTFE",
+          "Elastómeros",
+          "Fibra comprimida"
+        ]
+      },
+      "applications": [
+        "Bombas y válvulas",
+        "Intercambiadores de calor",
+        "Depósitos y reactores",
+        "Tuberías y conducciones",
+        "Compresores",
+        "Columnas de destilación"
+      ],
+      "certifications": ["ISO 9001:2015"]
+    },
+    {
+      "id": "tornilleria-industrial",
+      "name": "Tornillería Industrial",
+      "slug": "/tornilleria-2/",
+      "description": "Tornillería, varillas, espárragos, tuercas y recubrimientos para aplicaciones industriales críticas.",
+      "icon": "tornilleria",
+      "featured": true,
+      "order": 2,
+      "stats": {
+        "annual_volume_tonnes": 220,
+        "product_references": 4900,
+        "size_range": "1/2\" a 4\" de espesor",
+        "length_range": "2\" a 3 metros"
+      },
+      "products": [
+        {
+          "name": "Espárragos",
+          "description": "Varillas roscadas en toda su longitud para uniones bridadas"
+        },
+        {
+          "name": "Tuercas",
+          "description": "Tuercas hexagonales y especiales en diversas aleaciones"
+        },
+        {
+          "name": "Tornillos hexagonales",
+          "description": "Tornillos de cabeza hexagonal para aplicaciones generales"
+        },
+        {
+          "name": "Varillas roscadas",
+          "description": "Varillas con rosca en diferentes materiales y acabados"
+        },
+        {
+          "name": "Arandelas",
+          "description": "Arandelas de presión y planas para distribución de carga"
+        }
+      ],
+      "alloys": [
+        { "name": "Inconel", "description": "Aleación de níquel-cromo para alta temperatura y corrosión" },
+        { "name": "Titanium", "description": "Ligero y resistente a la corrosión" },
+        { "name": "Nimonic", "description": "Aleación de níquel-cromo para aplicaciones de alta temperatura" },
+        { "name": "Monel", "description": "Aleación de níquel-cobre resistente a ácidos" },
+        { "name": "Acero inoxidable", "description": "AISI 304, 316, 321, 347 y otras calidades" },
+        { "name": "Acero al carbono", "description": "Grados B7, B8, L7 y otros" }
+      ],
+      "coatings": [
+        "Zincado",
+        "Galvanizado",
+        "Cinc-níquel",
+        "Fosfatado",
+        "Dúplex (Xylan)"
+      ],
+      "standards": ["ASTM", "DIN", "ISO", "UNI"],
+      "applications": [
+        "Uniones bridadas en tuberías",
+        "Intercambiadores de calor",
+        "Reactores y depósitos a presión",
+        "Estructuras metálicas",
+        "Plantas petroquímicas"
+      ]
+    },
+    {
+      "id": "corte-plegado",
+      "name": "Corte y Plegado de Materiales",
+      "slug": "/corte-y-plegado/",
+      "description": "Servicio de corte y plegado de materiales con stock permanente de materias primas.",
+      "icon": "corte-plegado",
+      "featured": true,
+      "order": 3,
+      "services": [
+        {
+          "name": "Corte por waterjet",
+          "description": "Corte de precisión con chorro de agua para múltiples materiales"
+        },
+        {
+          "name": "Corte por plasma",
+          "description": "Corte de alta velocidad para materiales conductores"
+        },
+        {
+          "name": "Corte mecánico",
+          "description": "Corte con cizalla y sierra para diferentes espesores"
+        },
+        {
+          "name": "Plegado",
+          "description": "Conformado de chapas metálicas según especificaciones"
+        }
+      ],
+      "materials": [
+        { "name": "Acero al carbono", "description": "Planchas en diversos espesores y calidades" },
+        { "name": "Acero inoxidable", "description": "AISI 304, 316 y otras calidades" },
+        { "name": "Aluminio", "description": "Aleaciones para aplicaciones ligeras y resistentes" },
+        { "name": "Galvanizado", "description": "Acero con recubrimiento de zinc" },
+        { "name": "Cobre", "description": "Alta conductividad térmica y eléctrica" },
+        { "name": "Latón", "description": "Aleación de cobre-zinc para aplicaciones decorativas y funcionales" }
+      ],
+      "applications": [
+        "Fabricación de juntas a medida",
+        "Piezas para maquinaria industrial",
+        "Componentes para calderería",
+        "Paneles y carcasas",
+        "Piezas estructurales"
+      ]
+    },
+    {
+      "id": "cubrebridas",
+      "name": "Cubrebridas",
+      "slug": "/cubrebridas/",
+      "description": "Soluciones de cubrebridas para protección y seguridad en uniones bridadas.",
+      "icon": "cubrebridas",
+      "featured": true,
+      "order": 4,
+      "types": [
+        {
+          "name": "Cubrebridas estándar",
+          "description": "Protección para bridas según normativa"
+        },
+        {
+          "name": "Cubrebridas especiales",
+          "description": "Diseñados para aplicaciones y medidas específicas"
+        }
+      ],
+      "materials": [
+        "Acero al carbono",
+        "Acero inoxidable",
+        "Polietileno",
+        "Polipropileno"
+      ],
+      "applications": [
+        "Protección de uniones bridadas",
+        "Seguridad en plantas químicas",
+        "Prevención de salpicaduras y fugas",
+        "Aislamiento térmico de bridas"
+      ]
+    },
+    {
+      "id": "verificacion-montaje",
+      "name": "Verificación de Montaje de Juntas",
+      "slug": "/oficina-tecnica/",
+      "description": "Servicio técnico de verificación y control de montaje de uniones bridadas.",
+      "icon": "verificacion",
+      "featured": false,
+      "order": 5,
+      "services": [
+        "Verificación de apriete de tornillería",
+        "Control de par de apriete",
+        "Inspección de superficies de sellado",
+        "Certificación de montaje",
+        "Asesoramiento técnico in-situ"
+      ]
+    },
+    {
+      "id": "quality-service",
+      "name": "Quality Service",
+      "slug": "/quality-service-2/",
+      "description": "Asesoramiento técnico especializado para eliminar fallas relacionadas con el montaje de uniones bridadas en plantas industriales.",
+      "icon": "quality",
+      "featured": true,
+      "order": 6,
+      "services": [
+        {
+          "name": "Asesoramiento técnico especializado",
+          "description": "Selección de juntas adecuadas para cada aplicación"
+        },
+        {
+          "name": "Ingeniería aplicada",
+          "description": "Soluciones de ingeniería para procesos y sistemas de sellado"
+        },
+        {
+          "name": "Formación",
+          "description": "Capacitación en montaje y mantenimiento de uniones bridadas"
+        },
+        {
+          "name": "Auditoría de uniones bridadas",
+          "description": "Evaluación de estado y rendimiento de sellados existentes"
+        }
+      ],
+      "benefits": [
+        "Eliminación de fallas de montaje",
+        "Reducción de emisiones fugitivas",
+        "Aumento de seguridad de instalaciones",
+        "Ahorro de recursos",
+        "Optimización de costes operativos"
+      ]
+    }
+  ],
+  "featured_products": [
+    {
+      "category": "juntas-estanqueidad",
+      "name": "Kammprofile Donit",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2025/03/Kammprofile-Donit.png",
+      "description": "Junta de perfil acanalado de alto rendimiento"
+    },
+    {
+      "category": "juntas-estanqueidad",
+      "name": "Juntas para Bridas",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2025/03/bridas.png",
+      "description": "Juntas para conexiones bridadas"
+    },
+    {
+      "category": "cubrebridas",
+      "name": "Cubrebridas",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2025/03/cubrebridas.png",
+      "description": "Protección para uniones bridadas"
+    }
+  ],
+  "clients": [
+    "ERCROS",
+    "DOW",
+    "ARIANT",
+    "CEPSA",
+    "BASF",
+    "REPSOL",
+    "MASA"
+  ],
+  "client_logos": [
+    {
+      "name": "ERCROS",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/logo-Ercros-e1614006687750.jpg",
+      "width": 200,
+      "height": 88
+    },
+    {
+      "name": "DOW",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/DOWdiamond-red-RGB-1024x353-1-300x103.jpg",
+      "width": 265,
+      "height": 91
+    },
+    {
+      "name": "ARIANT",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/CLA_Logo_L_RGB_pos_300dpi-1024x390-1-300x114.jpg",
+      "width": 265,
+      "height": 101
+    },
+    {
+      "name": "CEPSA",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/Marca-Cepsa-Horizontal-300x85.jpg",
+      "width": 265,
+      "height": 75
+    },
+    {
+      "name": "BASF",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/BASFo_wh100or_4c-2-e1614006759793.jpg",
+      "width": 200,
+      "height": 100
+    },
+    {
+      "name": "REPSOL",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/AF_REPSOL_VP_POS_RGB-e1614007301925.jpg",
+      "width": 150,
+      "height": 125
+    },
+    {
+      "name": "MASA",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/LOGO-MASA-e1614006708180.jpg",
+      "width": 200,
+      "height": 65
+    }
+  ]
+}

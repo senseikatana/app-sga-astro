@@ -1,0 +1,71 @@
+{
+  "site": "Esinsa Gaskets",
+  "url": "https://www.esinsagaskets.com",
+  "logo": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/logotipESINSA_R-2-300x81.png",
+  "logo_width": 144,
+  "logo_height": 39,
+  "contact": {
+    "offices": {
+      "title": "Nuestras Oficinas",
+      "address": "Polígono Industrial Riu Clar",
+      "street": "C/. Ferro Nº 10",
+      "city": "Tarragona",
+      "zip": "43006",
+      "country": "España",
+      "phone": "+34 977 553 072",
+      "email": "esinsa@esinsa.es"
+    },
+    "schedule": {
+      "title": "Horario comercial",
+      "days": "Lunes a Viernes",
+      "hours": "08:00 - 17:00 Hs"
+    }
+  },
+  "social_media": {
+    "linkedin": "https://www.linkedin.com/company/esinsa-s-l/",
+    "instagram": "https://www.instagram.com/esinsa.es/"
+  },
+  "certifications": {
+    "iso_9001": "ISO 9001:2015",
+    "description": "ESINSA promueve la disminución de emisiones a la atmósfera, el ahorro de recursos materiales que eviten pérdidas por fugas e impactos derivados de una mala estanqueidad y la mejora continua."
+  },
+  "support_logos": [
+    {
+      "name": "ACCIÓ - Generalitat de Catalunya",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/ACCIa-integrat-Horitzontal-CAT-color.png",
+      "url": "https://www.accio.gencat.cat/es/inici/index.html",
+      "width": 559,
+      "height": 126
+    },
+    {
+      "name": "MOVES III",
+      "image": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/MOVES-III_v-300x300.png",
+      "width": 300,
+      "height": 300
+    }
+  ],
+  "services_menu": {
+    "title": "Servicios",
+    "items": [
+      { "text": "Empresa", "href": "https://www.esinsagaskets.com/empresa-2/", "page_key": "empresa" },
+      { "text": "Productos", "href": "https://www.esinsagaskets.com/juntas/", "page_key": "juntas" },
+      { "text": "Servicios", "href": "https://www.esinsagaskets.com/corte-y-plegado/", "page_key": "corte-plegado" },
+      { "text": "Industria", "href": "https://www.esinsagaskets.com/sectores/", "page_key": "sectores" },
+      { "text": "Contacto", "href": "https://www.esinsagaskets.com/contacto/", "page_key": "contacto" }
+    ]
+  },
+  "legal_menu": {
+    "title": "Legal",
+    "items": [
+      { "text": "Aviso Legal", "href": "https://www.esinsagaskets.com/aviso-legal/", "page_key": "aviso-legal" },
+      { "text": "Política de Privacidad", "href": "https://www.esinsagaskets.com/politica-de-privacidad/", "page_key": "politica-privacidad" },
+      { "text": "Política de Calidad", "href": "https://www.esinsagaskets.com/politica-de-calidad/", "page_key": "politica-calidad" },
+      { "text": "Política de Cookies", "href": "https://www.esinsagaskets.com/politica-de-cookies/", "page_key": "politica-cookies" },
+      { "text": "Condiciones de Ventas", "href": "https://www.esinsagaskets.com/condiciones-generales/", "page_key": "condiciones-ventas" },
+      { "text": "Sostenibilidad", "href": "https://www.esinsagaskets.com/sostenibilidad/", "page_key": "sostenibilidad" },
+      { "text": "Descargas", "href": "https://www.esinsagaskets.com/descargables/", "page_key": "descargas" }
+    ]
+  },
+  "copyright": "ESPECIALIDADES INDUSTRIALES SUMINISTROS AUTOMOCIÓN, S.L.",
+  "copyright_year": 2026
+}

@@ -1,0 +1,183 @@
+{
+  "site": {
+    "name": "Esinsa Gaskets",
+    "url": "https://www.esinsagaskets.com",
+    "logo": "https://www.esinsagaskets.com/wp-content/uploads/2021/04/logotipESINSA_R-1.png",
+    "logo_width": 150,
+    "logo_height": 43
+  },
+  "primary_menu": [
+    {
+      "text": "INICIO",
+      "href": "https://www.esinsagaskets.com/",
+      "slug": "/",
+      "page_key": "home"
+    },
+    {
+      "text": "EMPRESA",
+      "href": "https://www.esinsagaskets.com/empresa-2/",
+      "slug": "/empresa-2/",
+      "page_key": "empresa"
+    },
+    {
+      "text": "PRODUCTOS Y SERVICIOS",
+      "href": "https://www.esinsagaskets.com/#",
+      "slug": "#",
+      "is_dropdown": true,
+      "children": [
+        {
+          "text": "Juntas",
+          "href": "https://www.esinsagaskets.com/juntas/",
+          "slug": "/juntas/",
+          "page_key": "juntas"
+        },
+        {
+          "text": "Tornillería",
+          "href": "https://www.esinsagaskets.com/tornilleria-2/",
+          "slug": "/tornilleria-2/",
+          "page_key": "tornilleria"
+        },
+        {
+          "text": "Corte y plegado",
+          "href": "https://www.esinsagaskets.com/corte-y-plegado/",
+          "slug": "/corte-y-plegado/",
+          "page_key": "corte-plegado"
+        },
+        {
+          "text": "Cubrebridas",
+          "href": "https://www.esinsagaskets.com/cubrebridas/",
+          "slug": "/cubrebridas/",
+          "page_key": "cubrebridas"
+        },
+        {
+          "text": "Oficina técnica",
+          "href": "https://www.esinsagaskets.com/oficina-tecnica/",
+          "slug": "/oficina-tecnica/",
+          "page_key": "oficina-tecnica"
+        },
+        {
+          "text": "Quality Service",
+          "href": "https://www.esinsagaskets.com/quality-service-2/",
+          "slug": "/quality-service-2/",
+          "page_key": "quality-service"
+        }
+      ]
+    },
+    {
+      "text": "INDUSTRIA",
+      "href": "https://www.esinsagaskets.com/sectores/",
+      "slug": "/sectores/",
+      "page_key": "sectores"
+    },
+    {
+      "text": "NOTICIAS",
+      "href": "https://www.esinsagaskets.com/noticias/",
+      "slug": "/noticias/",
+      "page_key": "noticias"
+    },
+    {
+      "text": "CONTACTO",
+      "href": "https://www.esinsagaskets.com/contacto/",
+      "slug": "/contacto/",
+      "page_key": "contacto"
+    },
+    {
+      "text": "ENQUESTA DE SATISFACCIÓ",
+      "href": "https://www.esinsagaskets.com/enquesta-de-satisfaccio/",
+      "slug": "/enquesta-de-satisfaccio/",
+      "page_key": "enquesta-satisfaccio"
+    }
+  ],
+  "secondary_menu": [
+    {
+      "text": "SHOP ONLINE",
+      "href": "https://emarketindustry.com/es/",
+      "external": true
+    }
+  ],
+  "language_switcher": {
+    "current": "es",
+    "languages": [
+      { "code": "en", "text": "English", "href": "#" },
+      { "code": "fr", "text": "French", "href": "#" },
+      { "code": "pt", "text": "Portuguese", "href": "#" },
+      { "code": "es", "text": "Spanish", "href": "#" }
+    ]
+  },
+  "footer_menu": [
+    {
+      "text": "Empresa",
+      "href": "https://www.esinsagaskets.com/empresa-2/",
+      "slug": "/empresa-2/",
+      "page_key": "empresa"
+    },
+    {
+      "text": "Productos",
+      "href": "https://www.esinsagaskets.com/juntas/",
+      "slug": "/juntas/",
+      "page_key": "juntas"
+    },
+    {
+      "text": "Servicios",
+      "href": "https://www.esinsagaskets.com/corte-y-plegado/",
+      "slug": "/corte-y-plegado/",
+      "page_key": "corte-plegado"
+    },
+    {
+      "text": "Industria",
+      "href": "https://www.esinsagaskets.com/sectores/",
+      "slug": "/sectores/",
+      "page_key": "sectores"
+    },
+    {
+      "text": "Contacto",
+      "href": "https://www.esinsagaskets.com/contacto/",
+      "slug": "/contacto/",
+      "page_key": "contacto"
+    }
+  ],
+  "legal_menu": [
+    {
+      "text": "Aviso Legal",
+      "href": "https://www.esinsagaskets.com/aviso-legal/",
+      "slug": "/aviso-legal/",
+      "page_key": "aviso-legal"
+    },
+    {
+      "text": "Política de Privacidad",
+      "href": "https://www.esinsagaskets.com/politica-de-privacidad/",
+      "slug": "/politica-de-privacidad/",
+      "page_key": "politica-privacidad"
+    },
+    {
+      "text": "Política de Calidad",
+      "href": "https://www.esinsagaskets.com/politica-de-calidad/",
+      "slug": "/politica-de-calidad/",
+      "page_key": "politica-calidad"
+    },
+    {
+      "text": "Política de Cookies",
+      "href": "https://www.esinsagaskets.com/politica-de-cookies/",
+      "slug": "/politica-de-cookies/",
+      "page_key": "politica-cookies"
+    },
+    {
+      "text": "Condiciones de Ventas",
+      "href": "https://www.esinsagaskets.com/condiciones-generales/",
+      "slug": "/condiciones-generales/",
+      "page_key": "condiciones-ventas"
+    },
+    {
+      "text": "Sostenibilidad",
+      "href": "https://www.esinsagaskets.com/sostenibilidad/",
+      "slug": "/sostenibilidad/",
+      "page_key": "sostenibilidad"
+    },
+    {
+      "text": "Descargas",
+      "href": "https://www.esinsagaskets.com/descargables/",
+      "slug": "/descargables/",
+      "page_key": "descargas"
+    }
+  ]
+}

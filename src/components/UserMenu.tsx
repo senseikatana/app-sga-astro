@@ -1,66 +1,61 @@
-import { useState, useEffect } from 'react';
-import { auth, onAuthStateChanged, signOut } from '../lib/firebase';
+import { useEffect, useState } from 'react';
+import { createClient } from '@insforge/sdk';
+
+const insforge = createClient({
+  baseUrl: import.meta.env.PUBLIC_INSFORGE_URL,
+  anonKey: import.meta.env.PUBLIC_INSFORGE_ANON_KEY,
+});
+
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  avatar_url?: string;
+}
 
 export default function UserMenu() {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    (async () => {
+      try {
+        const { data } = await insforge.auth.getCurrentUser();
+        if (data?.user) setUser(data.user);
+      } catch {}
+    })();
   }, []);
 
+  if (!user) return null;
+
   const handleSignOut = async () => {
-    await signOut(auth);
+    await insforge.auth.signOut();
     window.location.href = '/signin';
   };
 
-  if (loading) return null;
-
-  if (!user) {
-    return (
-      <a
-        href="/signin"
-        className="text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition-colors"
-      >
-        Iniciar sesion
-      </a>
-    );
-  }
-
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 transition-colors"
-      >
-        <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-          <span className="text-indigo-700 dark:text-indigo-300 text-xs font-medium">
-            {user.email?.charAt(0).toUpperCase()}
-          </span>
+    <div class="sticky inset-x-0 bottom-0 border-t border-gray-200 dark:border-gray-800">
+      <div class="flex items-center gap-2 bg-white dark:bg-gray-900 p-4">
+        <img
+          alt={user.name || 'User'}
+          src={user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || user.email || 'U')}&background=4f46e5&color=fff&size=128`}
+          class="size-10 rounded-full object-cover border border-gray-200 dark:border-gray-700"
+        />
+        <div class="flex-1 min-w-0">
+          <p class="text-xs text-gray-900 dark:text-white">
+            <strong class="block font-medium truncate">{user.name || 'Operario'}</strong>
+            <span class="text-gray-500 dark:text-gray-400 truncate block">{user.email}</span>
+          </p>
         </div>
-      </button>
-
-      {isOpen && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg rounded-xl py-2 z-50">
-            <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-700">
-              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{user.email}</p>
-            </div>
-            <button
-              onClick={handleSignOut}
-              className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
-              Cerrar sesion
-            </button>
-          </div>
-        </>
-      )}
+        <button
+          title="Cerrar sesión"
+          onClick={handleSignOut}
+          class="shrink-0 rounded-md p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+        >
+          <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }

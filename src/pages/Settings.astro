@@ -134,71 +134,67 @@ import DashboardLayout from '../layouts/DashboardLayout.astro';
 </DashboardLayout>
 
 <script>
-  import { auth, onAuthStateChanged, updatePassword, signOut, sendPasswordResetEmail } from '../lib/firebase';
+  import { getCurrentSession, updatePassword, logoutUser } from '../lib/auth';
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = '/signin';
-      return;
-    }
+  const session = getCurrentSession();
+  if (!session) { window.location.href = '/signin'; }
 
-    const nameInput = document.getElementById('profile-name') as HTMLInputElement;
-    const emailInput = document.getElementById('profile-email') as HTMLInputElement;
-    const nameDisplay = document.getElementById('settings-name-display');
-    const emailDisplay = document.getElementById('settings-email-display');
-    const roleBadge = document.getElementById('settings-role-badge');
-    const avatarImg = document.getElementById('settings-avatar-img') as HTMLImageElement;
+  const nameInput = document.getElementById('profile-name') as HTMLInputElement;
+  const emailInput = document.getElementById('profile-email') as HTMLInputElement;
+  const nameDisplay = document.getElementById('settings-name-display');
+  const emailDisplay = document.getElementById('settings-email-display');
+  const roleBadge = document.getElementById('settings-role-badge');
+  const avatarImg = document.getElementById('settings-avatar-img') as HTMLImageElement;
 
-    const displayName = user.displayName || user.email?.split('@')[0] || 'User';
-    
-    if (nameInput) nameInput.value = displayName;
-    if (emailInput) emailInput.value = user.email || '';
-    if (nameDisplay) nameDisplay.textContent = displayName;
-    if (emailDisplay) emailDisplay.textContent = user.email || '';
-    if (roleBadge) roleBadge.textContent = 'Operario';
-    if (avatarImg) avatarImg.src = user.photoURL || '';
-  });
+  if (session) {
+    nameInput.value = session.name;
+    emailInput.value = session.email;
+    if (nameDisplay) nameDisplay.textContent = session.name;
+    if (emailDisplay) emailDisplay.textContent = session.email;
+    if (roleBadge) roleBadge.textContent = session.role === 'admin' ? 'Administrador' : 'Operario';
+    if (avatarImg) avatarImg.src = session.avatar || '';
+  }
 
   document.getElementById('profile-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (!session) return;
     const newName = nameInput.value.trim();
     if (!newName) return;
-    
-    // Firebase doesn't support updating displayName from client SDK directly
-    // For now, just show success
+    const users = JSON.parse(localStorage.getItem('esinsa_wms_users') || '[]');
+    const user = users.find((u: any) => u.id === session.userId);
+    if (user) {
+      user.name = newName;
+      localStorage.setItem('esinsa_wms_users', JSON.stringify(users));
+    }
+    session.name = newName;
+    sessionStorage.setItem('esinsa_wms_session', JSON.stringify(session));
+    if (nameDisplay) nameDisplay.textContent = newName;
     const btn = (e.target as HTMLFormElement).querySelector('button[type="submit"]');
     if (btn) { btn.textContent = 'Guardado'; setTimeout(() => { btn.textContent = 'Guardar cambios'; }, 1500); }
   });
 
-  document.getElementById('password-form')?.addEventListener('submit', async (e) => {
+  document.getElementById('password-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
     const msgDiv = document.getElementById('password-message');
     const currentPw = (document.getElementById('current-password') as HTMLInputElement).value;
     const newPw = (document.getElementById('new-password') as HTMLInputElement).value;
     const confirmPw = (document.getElementById('confirm-password') as HTMLInputElement).value;
 
-    if (!msgDiv) return;
+    if (!session || !msgDiv) return;
     if (newPw !== confirmPw) {
-      msgDiv.textContent = 'Las contrasenas no coinciden';
+      msgDiv.textContent = 'Las contraseñas no coinciden';
       msgDiv.className = 'rounded-lg px-4 py-3 text-sm bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800';
       msgDiv.classList.remove('hidden');
       return;
     }
-    
-    try {
-      const user = auth.currentUser;
-      if (!user || !user.email) throw new Error('No user');
-      const { EmailAuthProvider, reauthenticateWithCredential } = await import('firebase/auth');
-      const credential = EmailAuthProvider.credential(user.email, currentPw);
-      await reauthenticateWithCredential(user, credential);
-      await import('firebase/auth').then(mod => mod.updatePassword(user, newPw));
-      
-      msgDiv.textContent = 'Contrasena actualizada correctamente';
+    const result = updatePassword(session.userId, newPw);
+    if (result) {
+      msgDiv.textContent = 'Contraseña actualizada correctamente';
       msgDiv.className = 'rounded-lg px-4 py-3 text-sm bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800';
       msgDiv.classList.remove('hidden');
       (e.target as HTMLFormElement).reset();
-    } catch (err) {
-      msgDiv.textContent = 'Error al actualizar contrasena. Verifica tu contrasena actual.';
+    } else {
+      msgDiv.textContent = 'Error al actualizar contraseña';
       msgDiv.className = 'rounded-lg px-4 py-3 text-sm bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800';
       msgDiv.classList.remove('hidden');
     }
@@ -234,9 +230,9 @@ import DashboardLayout from '../layouts/DashboardLayout.astro';
     });
   });
 
-  document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    if (confirm('Seguro que quieres cerrar sesion?')) {
-      await signOut(auth);
+  document.getElementById('logout-btn')?.addEventListener('click', () => {
+    if (confirm('¿Seguro que quieres cerrar sesión?')) {
+      logoutUser();
       window.location.href = '/signin';
     }
   });

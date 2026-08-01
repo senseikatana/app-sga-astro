@@ -1,0 +1,493 @@
+{
+  "site": {
+    "name": "Esinsa Gaskets",
+    "description": "Industrial Sealing Solutions",
+    "tagline": "Soluciones de Estanqueidad Industrial",
+    "url": "https://www.esinsagaskets.com",
+    "wp_json": "https://www.esinsagaskets.com/wp-json/",
+    "company": {
+      "legal_name": "ESPECIALIDADES INDUSTRIALES SUMINISTROS AUTOMOCIÓN, S.L.",
+      "cif": "B43220383",
+      "founded": 1985,
+      "address": "C/ Ferro, n.º 10-12, Pol. Industrial Riu Clar",
+      "city": "Tarragona",
+      "zip": "43006",
+      "province": "Tarragona",
+      "country": "España",
+      "phone": "+34 977 553 072",
+      "email": "esinsa@esinsa.es",
+      "registry": "Tarragona T 1319, F 158, S 8, H T 7254, I/A 24",
+      "employees": "25+",
+      "clients": "1600+ clientes industriales satisfechos",
+      "export_countries": 15,
+      "stock_references": "60,000+"
+    }
+  },
+  "pages": {
+    "home": {
+      "slug": "/",
+      "url": "https://www.esinsagaskets.com/",
+      "title": "Inicio - Esinsa Gaskets",
+      "meta_description": "Industrial Sealing Solutions. Soluciones de estanqueidad industrial desde 1985.",
+      "content_summary": "Industrial Sealing Solutions. Estamos comprometidos en brindar soluciones de sellado a nuestros clientes desde 1985, operando mediante la innovación tecnológica para dar resolución a los problemas críticos de la estanqueidad que puedan surgir en la industria y en sus diversos sectores.",
+      "hero_title": "Sellado eficiente y seguro para la industria",
+      "hero_subtitle": "Soluciones de Estanqueidad Industrial",
+      "sections": {
+        "products_services": {
+          "title": "Nuestros productos y servicios",
+          "items": [
+            {
+              "name": "Juntas de estanqueidad",
+              "description": "Sistemas de sellado eficientes y seguros, con la máxima calidad de mercado, para mantener aplicaciones y procesos industriales sin fugas ni pérdidas.",
+              "icon": "juntas",
+              "link": "/juntas/"
+            },
+            {
+              "name": "Tornillería industrial",
+              "description": "Tornillería, varillas, espárragos, tuercas y recubrimientos de tornillería en zincados, galvanizados y aleaciones especiales como Inconel, Titanium, Nimonic, Monel.",
+              "icon": "tornilleria",
+              "link": "/tornilleria-2/"
+            },
+            {
+              "name": "Corte y plegado de materiales",
+              "description": "Stock de materias primas en planchas de acero al carbono, inoxidables, aluminio, galvanizado, cobre, latón, entre otros.",
+              "icon": "corte-plegado",
+              "link": "/corte-y-plegado/"
+            },
+            {
+              "name": "Juntas a medida",
+              "description": "Diseñamos y cortamos juntas de estanqueidad a medida para cumplir con los requerimientos técnicos de nuestros clientes en diferentes tipos de materiales.",
+              "icon": "juntas-medida",
+              "link": "/juntas/"
+            }
+          ]
+        },
+        "highlights": {
+          "title": "Lo más destacado de nuestros productos y servicios",
+          "items": [
+            "Juntas de estanqueidad",
+            "Verificación de montajes de juntas",
+            "Tornillería industrial y aleaciones especiales",
+            "Cubrebridas",
+            "Servicio de corte y plegado"
+          ]
+        },
+        "advantages": {
+          "title": "Esinsa te ofrece",
+          "items": [
+            {
+              "title": "Rapidez en la entrega",
+              "description": "Servicio inmediato y exprés",
+              "icon": "fast"
+            },
+            {
+              "title": "Asesoramiento técnico",
+              "description": "Para industrias críticas",
+              "icon": "help"
+            },
+            {
+              "title": "Productos a medida",
+              "description": "Soluciones personalizadas",
+              "icon": "supply"
+            },
+            {
+              "title": "Quality Service",
+              "description": "Ingeniería aplicada",
+              "icon": "quality"
+            }
+          ]
+        },
+        "quality_service": {
+          "title": "Quality service e ingeniería aplicada",
+          "description": "Nuestro servicio exclusivo de Quality Service consiste en un asesoramiento técnico especializado, destinado a eliminar las fallas relacionadas con el montaje de uniones bridadas en plantas industriales. Ofrecemos soluciones de ingeniería aplicada a los procesos y sistemas, junto a un asesoramiento especializado, con el fin de brindar a la industria, el servicio técnico de selección de las juntas adecuadas para que el sellado sea eficiente y seguro."
+        }
+      }
+    },
+    "empresa": {
+      "slug": "/empresa-2/",
+      "url": "https://www.esinsagaskets.com/empresa-2/",
+      "title": "Empresa - Esinsa Gaskets",
+      "meta_description": "Soluciones de Estanqueidad para la industria - Desde 1985",
+      "content": {
+        "historia": {
+          "title": "Nuestra Historia",
+          "text": "Desde 1985, en ESINSA fabricamos juntas planas de estanqueidad, y distribuimos juntas y tornillería industrial a diversos sectores. Ofrecemos servicios de corte y plegado de materiales, junto con un servicio técnico personalizado de asesoramiento a nuestros clientes. Nuestra empresa está comprometida con la mejora continua y la innovación tecnológica, aportando valor al progreso a través de un enfoque que une calidad, eficiencia y dedicación."
+        },
+        "soluciones": {
+          "title": "Soluciones de estanqueidad para la industria",
+          "text": "ESINSA nació para dar respuesta a una amplia cartera de clientes que requerían una atención personalizada y asesoramiento técnico especializado para dar solución a sus problemas de estanqueidad. Con el paso de los años, la empresa fue expandiendo el alcance de sus negocios y consiguió consolidarse en el mercado nacional e internacional como un líder industrial en su sector."
+        },
+        "mision": {
+          "title": "Misión",
+          "text": "Ofrecemos soluciones de estanqueidad de alta calidad al mercado industrial, mediante la fabricación de juntas planas, y la disposición de una amplia variedad de juntas y tornillería industrial, corte y plegado de materiales, calidad en los acabados de los productos terminados e inmediatez en los plazos de entrega, fomentando las relaciones de confianza y satisfacción de nuestros clientes a largo plazo."
+        },
+        "vision": {
+          "title": "Visión",
+          "text": "Fomentamos la confianza y el compromiso con nuestros clientes y proveedores, para garantizar un proceso de mejora continua y de sostenibilidad ambiental, impulsadas por un equipo humano altamente cualificado, una constante innovación tecnológica, el enfoque integral en procesos de mejora continua y en la excelencia en la ejecución de proyectos industriales."
+        },
+        "valores": [
+          {
+            "title": "Excelencia técnica y humana",
+            "text": "Valoramos a nuestro equipo humano como el activo más importante, promovemos la formación continua, el trabajo colaborativo, el desarrollo profesional y personal, y el bienestar laboral dentro de un ambiente de trabajo dinámico y proactivo."
+          },
+          {
+            "title": "Capacidad productiva",
+            "text": "La innovación tecnológica nos ha permitido crecer en productividad a lo largo de los años, mejorando la eficiencia de nuestros procesos de producción, optimizando costos y ofreciendo tanto calidad como tiempo de entrega óptimo para los clientes."
+          },
+          {
+            "title": "Innovación permanente",
+            "text": "Para darle valor agregado a nuestros productos y servicios, hemos incorporado tecnología de avanzada para asegurar la calidad y la excelencia de los productos y servicios; y hemos optimizado los flujos de trabajo otorgándoles mayor agilidad y eficiencia."
+          },
+          {
+            "title": "Calidad certificada",
+            "text": "Estamos comprometidos con la industria en ofrecer productos y servicios de calidad, empleando materias primas seleccionadas, supervisando el proceso de producción para alcanzar los estándares de calidad establecidos. Aplicamos las normas ISO 9000 para asegurar la excelencia en todos nuestros procesos."
+          }
+        ],
+        "stats": [
+          { "value": "1600+", "label": "Clientes industriales satisfechos", "icon": "clients" },
+          { "value": "39+", "label": "Años de experiencia comprobada", "icon": "years" },
+          { "value": "25+", "label": "Empleados contratados", "icon": "employees" },
+          { "value": "15", "label": "Países exportación", "icon": "countries" },
+          { "value": "60,000+", "label": "Referencias en stock", "icon": "stock" }
+        ],
+        "partners": [
+          "ERCROS",
+          "DOW",
+          "ARIANT",
+          "CEPSA",
+          "BASF",
+          "REPSOL",
+          "MASA"
+        ]
+      }
+    },
+    "juntas": {
+      "slug": "/juntas/",
+      "url": "https://www.esinsagaskets.com/juntas/",
+      "title": "JOINTS - Esinsa Gaskets",
+      "meta_description": "GASKET ESINSA offers a wide range of gaskets depending on the type of sealing desired by the customer, the working conditions and those conditions that affect the durability and quality of the sealing.",
+      "categories": [
+        {
+          "name": "Metal Gaskets",
+          "description": "Diseñadas para aplicaciones de estanqueidad estática en condiciones extremas",
+          "icon": "metal"
+        },
+        {
+          "name": "Semi-Metallic Gaskets",
+          "description": "Juntas compuestas de materiales metálicos y no metálicos que aportan resistencia y flexibilidad",
+          "icon": "semi-metal"
+        },
+        {
+          "name": "Non-Metallic Gaskets",
+          "description": "Apropiadas para aplicaciones tanto de alta como de baja temperatura",
+          "icon": "non-metal"
+        },
+        {
+          "name": "Custom-Made Gaskets",
+          "description": "Juntas sector-specific y application-specific que requieren soluciones a medida",
+          "icon": "custom"
+        }
+      ],
+      "mission": "Ayudar a la industria a través de nuestros productos y servicios a mejorar la estanqueidad con el objetivo de reducir sus emisiones, aumentar la seguridad de las instalaciones y personas y ahorrar recursos evitando pérdidas por fugas e impactos derivados de una mala estanqueidad.",
+      "quality": {
+        "objectives": [
+          "Total customer satisfaction",
+          "Desarrollar y revisar procesos relacionados con la calidad",
+          "Minimizar rechazos e incidentes en la producción o prestación de servicio",
+          "Mejora continua en los procesos y ofrecer a nuestros clientes la mejor calidad en el producto y servicio"
+        ],
+        "standards": "Cumplimos con las normas ISO 9001/2015. Gestionamos el proceso de calidad de forma continua."
+      },
+      "gasket_types": [
+        "Juntas Planas",
+        "Espirometálicas",
+        "Juntas O-Rings",
+        "Juntas RTJ",
+        "Juntas Dentadas",
+        "Juntas a Medida"
+      ],
+      "materials": [
+        "Metálicas",
+        "Elastómero",
+        "PTFE – Teflon",
+        "Grafito"
+      ],
+      "specs": {
+        "temperature_range": "-20°C a 250°C",
+        "max_pressure": "40 bar",
+        "fluid_compatibility": [
+          "Agua y Vapor",
+          "Aceites e Hidrocarburos",
+          "Ácidos",
+          "Álcalis / Bases",
+          "Productos Alimentarios"
+        ]
+      }
+    },
+    "tornilleria": {
+      "slug": "/tornilleria-2/",
+      "url": "https://www.esinsagaskets.com/tornilleria-2/",
+      "title": "Tornillería Industrial - Esinsa Gaskets",
+      "meta_description": "Tornillería industrial, varillas, espárragos, tuercas y recubrimientos especiales.",
+      "description": "Tornillería, varillas, espárragos, tuercas y recubrimientos de tornillería en zincados, galvanizados y aleaciones especiales como Inconel, Titanium, Nimonic, Monel.",
+      "volume": "220 toneladas/año",
+      "references": "4.900 referencias de producto",
+      "sizes": "Desde media pulgada a cuatro pulgadas de espesor, de entre dos pulgadas a tres metros de largo",
+      "alloys": [
+        "Inconel",
+        "Titanium",
+        "Nimonic",
+        "Monel"
+      ],
+      "coatings": [
+        "Zincados",
+        "Galvanizados"
+      ]
+    },
+    "corte-plegado": {
+      "slug": "/corte-y-plegado/",
+      "url": "https://www.esinsagaskets.com/corte-y-plegado/",
+      "title": "Corte y Plegado - Esinsa Gaskets",
+      "meta_description": "Servicio de corte y plegado de materiales. Stock de materias primas en planchas.",
+      "materials": [
+        "Acero al carbono",
+        "Inoxidables",
+        "Aluminio",
+        "Galvanizado",
+        "Cobre",
+        "Latón"
+      ]
+    },
+    "cubrebridas": {
+      "slug": "/cubrebridas/",
+      "url": "https://www.esinsagaskets.com/cubrebridas/",
+      "title": "Cubrebridas - Esinsa Gaskets",
+      "meta_description": "Soluciones de cubrebridas para protección y seguridad industrial."
+    },
+    "oficina-tecnica": {
+      "slug": "/oficina-tecnica/",
+      "url": "https://www.esinsagaskets.com/oficina-tecnica/",
+      "title": "Oficina Técnica - Esinsa Gaskets",
+      "meta_description": "Verificación de montaje de juntas y servicio técnico especializado."
+    },
+    "quality-service": {
+      "slug": "/quality-service-2/",
+      "url": "https://www.esinsagaskets.com/quality-service-2/",
+      "title": "Quality Service - Esinsa Gaskets",
+      "meta_description": "Asesoramiento técnico especializado para eliminar fallas en montaje de uniones bridadas.",
+      "description": "Nuestro servicio exclusivo de Quality Service consiste en un asesoramiento técnico especializado, destinado a eliminar las fallas relacionadas con el montaje de uniones bridadas en plantas industriales."
+    },
+    "sectores": {
+      "slug": "/sectores/",
+      "url": "https://www.esinsagaskets.com/sectores/",
+      "title": "Industria - Esinsa Gaskets",
+      "meta_description": "Esinsa Gaskets fortalece sus servicios de sellado al mercado industrial.",
+      "sectors": [
+        "Químico y Petroquímico",
+        "Tratamiento de Agua y Energía Hidráulica",
+        "Sector Nuclear",
+        "Industria Farmacéutica",
+        "Sector Energético",
+        "Obra Pública",
+        "Petróleo y Gas",
+        "Ingeniería",
+        "Industria Alimentaria",
+        "Industria Agrícola",
+        "Industria Naval",
+        "Maquinaria Hidráulica y Neumática"
+      ]
+    },
+    "noticias": {
+      "slug": "/noticias/",
+      "url": "https://www.esinsagaskets.com/noticias/",
+      "title": "Noticias - Esinsa Gaskets",
+      "meta_description": "Blog de noticias de Esinsa Gaskets",
+      "posts": [
+        {
+          "title": "Esinsa Gaskets cree en las oportunidades laborales",
+          "date": "2024-09-12",
+          "link": "https://www.esinsagaskets.com/esinsa-gaskets-cree-en-las-oportunidades-laborales/",
+          "categories": ["EMPLEOS", "NOTICIAS"],
+          "excerpt": "Un convenio de prácticas con el Servei d'Ocupació de Catalunya (SOC) ha permitido este año la incorporación en plantilla de cuatro personas en el área de logística.",
+          "content_preview": "Esinsa Gaskets cree en las oportunidades laborales. En lo que lleva de año, ha incorporado en plantilla a cuatro personas procedentes de programas formativos del Servei d'Ocupació de Catalunya (SOC), organismo público con quien mantiene desde hace tiempo convenios de colaboración y prácticas."
+        },
+        {
+          "title": "La profesionalidad tiene recompensa",
+          "date": "2024-09-04",
+          "link": "https://www.esinsagaskets.com/la-profesionalidad-tiene-recompensa/",
+          "categories": ["NOTICIAS"],
+          "excerpt": "Esinsa Gaskets ha obtenido el contrato de suministro de tornillería industrial de Repsol durante los próximos dos años en España y Portugal.",
+          "content_preview": "En Esinsa Gaskets acabamos de obtener el contrato de suministro de tornillería industrial de Repsol durante los próximos dos años en España y Portugal, prorrogable anualmente al finalizar este periodo."
+        },
+        {
+          "title": "Esinsa Gaskets estrena almacén vertical automatizado",
+          "date": "2024-07-24",
+          "link": "https://www.esinsagaskets.com/esinsa-gaskets-estrena-almacen-vertical-automatizado/",
+          "categories": ["NOTICIAS"],
+          "excerpt": "Dos módulos robotizados de 7 metros de alto y 42 bandejas por unidad, con capacidad de soportar 750 kilos de mercadería por estante.",
+          "content_preview": "Esinsa Gaskets estrena almacén vertical automatizado. Fabricados por Modula, hay ya dos módulos de siete metros de alto a pleno rendimiento, a los que se incorporará un tercero a finales de año."
+        },
+        {
+          "title": "Esinsa Gaskets alcanza la autonomía energética con fuentes renovables",
+          "date": "2024-06-11",
+          "link": "https://www.esinsagaskets.com/esinsa-gaskets-alcanza-la-autonomia-energetica-con-fuentes-renovables/",
+          "categories": ["NOTICIAS"],
+          "excerpt": "El 100% del consumo eléctrico se genera mediante instalaciones fotovoltaicas propias.",
+          "content_preview": "Esinsa Gaskets ha alcanzado la autonomía energética mediante el uso de fuentes renovables. Con 100kW fotovoltaicos instalados en sus naves del polígono Riu Clar de Tarragona."
+        }
+      ]
+    },
+    "contacto": {
+      "slug": "/contacto/",
+      "url": "https://www.esinsagaskets.com/contacto/",
+      "title": "CONTACTO - Esinsa Gaskets",
+      "meta_description": "Contacta con Esinsa Gaskets para soluciones de estanqueidad industrial.",
+      "form_fields": [
+        { "name": "nombre", "label": "NOMBRE", "required": true },
+        { "name": "empresa", "label": "EMPRESA", "required": true },
+        { "name": "telefono", "label": "TELÉFONO", "required": true },
+        { "name": "email", "label": "E-MAIL", "required": true },
+        { "name": "mensaje", "label": "MENSAJE", "required": true }
+      ],
+      "privacy": "Acepto los términos de la Política de privacidad",
+      "schedule": {
+        "weekdays": "Lunes a Viernes",
+        "hours": "08:00 - 17:00 Hs"
+      },
+      "holidays": [
+        "1 de enero – Año Nuevo",
+        "6 de enero – Epifanía del Señor",
+        "1 de mayo – Fiesta del Trabajo",
+        "24 de junio – San Juan",
+        "19 de agosto – Sant Magí",
+        "11 de septiembre – Diada",
+        "23 de septiembre – Santa Tecla",
+        "1 de noviembre – Día de todos los santos",
+        "6 de diciembre – Día de la Constitución Española",
+        "8 de diciembre – La Inmaculada Concepción",
+        "25 de diciembre – Natividad del Señor"
+      ]
+    },
+    "aviso-legal": {
+      "slug": "/aviso-legal/",
+      "url": "https://www.esinsagaskets.com/aviso-legal/",
+      "title": "Aviso legal - Esinsa Gaskets",
+      "sections": [
+        {
+          "title": "1. OBJETO",
+          "content": "El presente aviso legal regula el uso y utilización del sitio web www.esinsagaskets.com del que es titular ESPECIALIDADES INDUSTRIALES SUMINISTROS AUTOMOCIÓN, S.L. (ESINSA). La navegación por el sitio web de ESINSA le atribuye la condición de USUARIO del mismo y conlleva su aceptación plena y sin reservas de todas y cada una de las condiciones publicadas en este aviso legal."
+        },
+        {
+          "title": "2. IDENTIFICACIÓN",
+          "content": "ESINSA, en cumplimiento de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico: Denominación social: ESPECIALIDADES INDUSTRIALES SUMINISTROS AUTOMOCIÓN, S.L. CIF: B43220383. Domicilio social: C/ Ferro, n.º 10-12, Pol. Industrial Riu Clar, 43006 Tarragona. Registro Mercantil de Tarragona T 1319, F 158, S 8, H T 7254, I/A 24."
+        },
+        {
+          "title": "3. COMUNICACIONES",
+          "content": "Teléfono: +34 977 553 072. Email: esinsa@esinsa.es."
+        }
+      ]
+    },
+    "politica-privacidad": {
+      "slug": "/politica-de-privacidad/",
+      "url": "https://www.esinsagaskets.com/politica-de-privacidad/",
+      "title": "Política de Privacidad - Esinsa Gaskets",
+      "data_controller": {
+        "name": "ESPECIALIDADES INDUSTRIALES SUMINISTROS AUTOMOCIÓN, S.L.",
+        "cif": "B43220383",
+        "address": "C/ Ferro, n.º 10-12, Pol. Industrial Riu Clar – 43006 – TARRAGONA",
+        "phone": "+34 977 553 072",
+        "email": "esinsa@esinsa.es"
+      },
+      "purposes": [
+        {
+          "title": "Candidatos a puesto de trabajo",
+          "description": "Gestión de Curriculums Vitae y procesos de selección de personal",
+          "legitimation": "Ejecución de un contrato o medidas precontractuales",
+          "retention": "Dos años"
+        }
+      ],
+      "rights": ["Acceso", "Rectificación", "Supresión", "Limitación", "Portabilidad", "Oposición"]
+    },
+    "politica-cookies": {
+      "slug": "/politica-de-cookies/",
+      "url": "https://www.esinsagaskets.com/politica-de-cookies/",
+      "title": "Política de Cookies - Esinsa Gaskets",
+      "description": "Información sobre el uso de cookies en el sitio web www.esinsagaskets.com",
+      "cookie_categories": [
+        {
+          "name": "Necesarias",
+          "always_active": true,
+          "description": "Las cookies necesarias son cruciales para las funciones básicas del sitio web.",
+          "cookies": [
+            { "name": "cookieyes-consent", "duration": "1 año", "description": "CookieYes para recordar preferencias de consentimiento" },
+            { "name": "_lfa", "duration": "1 año", "description": "Leadfeeder para identificar IP de visitantes" },
+            { "name": "elementor", "duration": "Nunca", "description": "Tema WordPress para implementar contenido en tiempo real" }
+          ]
+        },
+        {
+          "name": "Funcionales",
+          "always_active": false,
+          "description": "Ayudan a realizar funcionalidades como compartir contenido en redes sociales.",
+          "cookies": [
+            { "name": "pll_language", "duration": "1 año", "description": "Polylang para recordar idioma seleccionado" }
+          ]
+        },
+        {
+          "name": "Analítica",
+          "always_active": false,
+          "description": "Se utilizan para comprender cómo interactúan los visitantes con el sitio web.",
+          "cookies": [
+            { "name": "__utma", "provider": "Google Analytics" },
+            { "name": "__utmb", "provider": "Google Analytics" },
+            { "name": "__utmc", "provider": "Google Analytics" },
+            { "name": "__utmz", "provider": "Google Analytics" },
+            { "name": "_ga", "provider": "Google Analytics" },
+            { "name": "_gat", "provider": "Google Analytics" }
+          ]
+        }
+      ]
+    },
+    "politica-calidad": {
+      "slug": "/politica-de-calidad/",
+      "url": "https://www.esinsagaskets.com/politica-de-calidad/",
+      "title": "Política de Calidad - Esinsa Gaskets",
+      "description": "ESINSA cumple con las normas ISO 9001/2015 y gestiona el proceso de calidad de forma continua."
+    },
+    "condiciones-ventas": {
+      "slug": "/condiciones-generales/",
+      "url": "https://www.esinsagaskets.com/condiciones-generales/",
+      "title": "Condiciones de Ventas - Esinsa Gaskets"
+    },
+    "sostenibilidad": {
+      "slug": "/sostenibilidad/",
+      "url": "https://www.esinsagaskets.com/sostenibilidad/",
+      "title": "Sostenibilidad - Esinsa Gaskets",
+      "highlights": [
+        "Autonomía energética con instalaciones fotovoltaicas propias (100kW + 100kW adicionales)",
+        "40% de flota comercial electrificada",
+        "Reciclaje de 11.400 kg de acero y 1.700 kg de aluminio al año",
+        "Compromiso con los Objetivos de Desarrollo Sostenible (ODS) de la ONU"
+      ]
+    },
+    "descargas": {
+      "slug": "/descargables/",
+      "url": "https://www.esinsagaskets.com/descargables/",
+      "title": "Descargables - Esinsa Gaskets",
+      "downloads": [
+        { "name": "Tornillos para bridas", "file": "tornillos-para-bridas" },
+        { "name": "Servicio de taller", "file": "servicio-de-taller" },
+        { "name": "Quality Service", "file": "quality-service" },
+        { "name": "Formación", "file": "formacion" },
+        { "name": "Catálogo tornillería", "file": "catalogo-tornilleria" },
+        { "name": "Catálogo Juntas", "file": "catalogo-juntas" },
+        { "name": "Catálogo general", "file": "catalogo-general" }
+      ]
+    },
+    "enquesta-satisfaccio": {
+      "slug": "/enquesta-de-satisfaccio/",
+      "url": "https://www.esinsagaskets.com/enquesta-de-satisfaccio/",
+      "title": "Enquesta de Satisfacció - Esinsa Gaskets",
+      "description": "Encuesta de satisfacción y servicio para clientes industriales."
+    }
+  }
+}

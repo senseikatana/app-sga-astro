@@ -1,39 +1,33 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import {
-  auth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  signInWithPhoneNumber,
-  googleProvider,
-  RecaptchaVerifier,
-  signOut as firebaseSignOut,
-  sendPasswordResetEmail,
-  onAuthStateChanged,
-  type User,
-  type ConfirmationResult,
-} from '../lib/firebase';
+import { insforge } from '../lib/insforge';
 
-interface AuthContextType {
+interface User {
+  id: string;
+  email: string;
+  name?: string;
+  avatar_url?: string;
+}
+
+interface AuthState {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error?: string }>;
-  signUp: (email: string, password: string) => Promise<{ error?: string }>;
-  signInWithGoogle: () => Promise<{ error?: string }>;
-  signInWithPhone: (phoneNumber: string) => Promise<{ error?: string; confirmationResult?: ConfirmationResult }>;
-  confirmPhoneCode: (confirmationResult: ConfirmationResult, code: string) => Promise<{ error?: string }>;
+  signUp: (email: string, password: string, name: string) => Promise<{ error?: string; requireEmailVerification?: boolean }>;
   signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<void>;
+  signInWithOAuth: (provider: 'google' | 'github' | 'microsoft') => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthState>({
+  user: null,
+  loading: true,
+  signIn: async () => ({}),
+  signUp: async () => ({}),
+  signOut: async () => {},
+  signInWithOAuth: async () => {},
+});
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -41,112 +35,67 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data } = await insforge.auth.getCurrentUser();
+        if (!cancelled) setUser(data?.user ?? null);
+      } catch {
+        if (!cancelled) setUser(null);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   const signIn = async (email: string, password: string) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      return {};
-    } catch (error: any) {
-      const messages: Record<string, string> = {
-        'auth/user-not-found': 'No existe una cuenta con este correo.',
-        'auth/wrong-password': 'Contrasena incorrecta.',
-        'auth/invalid-email': 'Correo electronico invalido.',
-        'auth/too-many-requests': 'Demasiados intentos. Intenta de nuevo mas tarde.',
-        'auth/invalid-credential': 'Credenciales invalidas.',
-      };
-      return { error: messages[error.code] || 'Error al iniciar sesion.' };
-    }
-  };
-
-  const signUp = async (email: string, password: string) => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      return {};
-    } catch (error: any) {
-      const messages: Record<string, string> = {
-        'auth/email-already-in-use': 'Ya existe una cuenta con este correo.',
-        'auth/invalid-email': 'Correo electronico invalido.',
-        'auth/weak-password': 'La contrasena es muy debil.',
-      };
-      return { error: messages[error.code] || 'Error al crear la cuenta.' };
-    }
-  };
-
-  const signInWithGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-      return {};
-    } catch (error: any) {
-      const messages: Record<string, string> = {
-        'auth/popup-closed-by-user': 'Ventana de login cerrada.',
-        'auth/popup-blocked': 'Popup bloqueado por el navegador.',
-        'auth/cancelled-popup-request': 'Login cancelado.',
-        'auth/unauthorized-domain': 'Dominio no autorizado. Agrega localhost en Firebase Console.',
-      };
-      return { error: messages[error.code] || 'Error al iniciar sesion con Google.' };
-    }
-  };
-
-  const signInWithPhone = async (phoneNumber: string) => {
-    try {
-      if (!(window as any).__recaptchaVerifier) {
-        (window as any).__recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-          size: 'invisible',
-        });
+      const { data, error } = await insforge.auth.signInWithPassword({ email, password });
+      if (error) {
+        if (error.statusCode === 403) return { error: 'Email no verificado. Revisa tu bandeja.' };
+        return { error: error.message || 'Credenciales incorrectas' };
       }
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        phoneNumber,
-        (window as any).__recaptchaVerifier,
-      );
-      return { confirmationResult };
-    } catch (error: any) {
-      const messages: Record<string, string> = {
-        'auth/invalid-phone-number': 'Numero de telefono invalido.',
-        'auth/too-many-requests': 'Demasiados intentos. Intenta de nuevo mas tarde.',
-        'auth/quota-exceeded': 'Cuota de SMS excedida.',
-      };
-      return { error: messages[error.code] || 'Error al enviar codigo SMS.' };
+      setUser(data?.user ?? null);
+      return {};
+    } catch (e: any) {
+      return { error: e.message || 'Error al iniciar sesión' };
     }
   };
 
-  const confirmPhoneCode = async (confirmationResult: ConfirmationResult, code: string) => {
+  const signUp = async (email: string, password: string, name: string) => {
     try {
-      await confirmationResult.confirm(code);
+      const { data, error } = await insforge.auth.signUp({
+        email,
+        password,
+        name,
+        redirectTo: 'http://localhost:4321/signin',
+      });
+      if (error) return { error: error.message || 'Error al registrar' };
+      if (data?.requireEmailVerification) return { requireEmailVerification: true };
+      if (data?.accessToken) {
+        setUser(data?.user ?? null);
+        return {};
+      }
       return {};
-    } catch (error: any) {
-      return { error: 'Codigo de verificacion incorrecto.' };
+    } catch (e: any) {
+      return { error: e.message || 'Error al registrar' };
     }
+  };
+
+  const signInWithOAuth = async (provider: 'google' | 'github' | 'microsoft') => {
+    await insforge.auth.signInWithOAuth(provider, {
+      redirectTo: 'http://localhost:4321',
+    });
   };
 
   const signOut = async () => {
-    await firebaseSignOut(auth);
-  };
-
-  const resetPassword = async (email: string) => {
-    await sendPasswordResetEmail(auth, email);
+    await insforge.auth.signOut();
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        signIn,
-        signUp,
-        signInWithGoogle,
-        signInWithPhone,
-        confirmPhoneCode,
-        signOut,
-        resetPassword,
-      }}
-    >
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut, signInWithOAuth }}>
       {children}
     </AuthContext.Provider>
   );
