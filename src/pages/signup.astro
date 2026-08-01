@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Registro - ESINSA WMS">
+  <div id="auth-root"></div>
+</BaseLayout>
+
+<script>
+  import React, { useState, useEffect, FormEvent } from 'react';
+  import { createRoot } from 'react-dom/client';
+  import { auth, createUserWithEmailAndPassword, onAuthStateChanged } from '../lib/firebase';
+
+  function SignUpForm() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [checking, setChecking] = useState(true);
+
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.href = '/';
+        } else {
+          setChecking(false);
+        }
+      });
+      return () => unsubscribe();
+    }, []);
+
+    const handleSubmit = async (e: FormEvent) => {
+      e.preventDefault();
+      setError('');
+
+      if (password !== confirmPassword) {
+        setError('Las contrasenas no coinciden.');
+        return;
+      }
+
+      if (password.length < 6) {
+        setError('La contrasena debe tener al menos 6 caracteres.');
+        return;
+      }
+
+      setLoading(true);
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        window.location.href = '/';
+      } catch (e: any) {
+        const messages: Record<string, string> = {
+          'auth/email-already-in-use': 'Ya existe una cuenta con este correo.',
+          'auth/invalid-email': 'Correo electronico invalido.',
+          'auth/weak-password': 'La contrasena es muy debil.',
+        };
+        setError(messages[e.code] || 'Error al crear la cuenta.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (checking) {
+      return React.createElement('div', { className: 'flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-950' },
+        React.createElement('div', { className: 'text-center' },
+          React.createElement('div', { className: 'mx-auto size-12 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent' }),
+          React.createElement('p', { className: 'mt-4 text-sm text-gray-500 dark:text-gray-400' }, 'Cargando...')
+        )
+      );
+    }
+
+    return React.createElement('div', { className: 'relative min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950' },
+      React.createElement('div', { className: 'fixed inset-0 z-0' },
+        React.createElement('img', { src: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80', alt: '', className: 'h-full w-full object-cover opacity-20 dark:opacity-10' }),
+        React.createElement('div', { className: 'absolute inset-0 bg-gradient-to-b from-gray-100/80 via-gray-100/90 to-gray-100/80 dark:from-gray-950/80 dark:via-gray-950/90 dark:to-gray-950/80' })
+      ),
+      React.createElement('div', { className: 'relative z-10 mx-auto max-w-lg px-4 py-16 w-full' },
+        React.createElement('div', { className: 'text-center' },
+          React.createElement('div', { className: 'mx-auto inline-flex size-14 items-center justify-center rounded-full bg-indigo-600 shadow-lg shadow-indigo-600/25' },
+            React.createElement('svg', { className: 'size-7 text-white', fill: 'none', viewBox: '0 0 24 24', strokeWidth: '1.5', stroke: 'currentColor' },
+              React.createElement('path', { strokeLinecap: 'round', strokeLinejoin: 'round', d: 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z' })
+            )
+          ),
+          React.createElement('h1', { className: 'mt-4 text-2xl font-bold text-gray-900 dark:text-white' }, 'ESINSA WMS'),
+          React.createElement('p', { className: 'mt-1 text-sm text-gray-500 dark:text-gray-400' }, 'Sistema de Gestion de Almacenes')
+        ),
+        React.createElement('div', { className: 'mt-8 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-8 shadow-xl' },
+          React.createElement('h2', { className: 'text-lg font-semibold text-gray-900 dark:text-white' }, 'Crear Cuenta'),
+          React.createElement('p', { className: 'mt-1 text-sm text-gray-500 dark:text-gray-400' }, 'Registrate para acceder a ESINSA'),
+
+          error && React.createElement('div', { className: 'mt-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 text-sm text-red-700 dark:text-red-400' }, error),
+
+          React.createElement('form', { onSubmit: handleSubmit, className: 'mt-6 space-y-4' },
+            React.createElement('div', null,
+              React.createElement('label', { className: 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1' }, 'Nombre'),
+              React.createElement('input', {
+                type: 'text', required: true, value: name,
+                onChange: (e: any) => setName(e.target.value),
+                className: 'w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none',
+                placeholder: 'Tu nombre'
+              })
+            ),
+            React.createElement('div', null,
+              React.createElement('label', { className: 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1' }, 'Email'),
+              React.createElement('input', {
+                type: 'email', required: true, value: email,
+                onChange: (e: any) => setEmail(e.target.value),
+                className: 'w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none',
+                placeholder: 'tu@email.com'
+              })
+            ),
+            React.createElement('div', null,
+              React.createElement('label', { className: 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1' }, 'Contrasena'),
+              React.createElement('input', {
+                type: 'password', required: true, minLength: 6, value: password,
+                onChange: (e: any) => setPassword(e.target.value),
+                className: 'w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none',
+                placeholder: 'Minimo 6 caracteres'
+              })
+            ),
+            React.createElement('div', null,
+              React.createElement('label', { className: 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1' }, 'Confirmar Contrasena'),
+              React.createElement('input', {
+                type: 'password', required: true, minLength: 6, value: confirmPassword,
+                onChange: (e: any) => setConfirmPassword(e.target.value),
+                className: 'w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none',
+                placeholder: 'Repite tu contrasena'
+              })
+            ),
+            React.createElement('button', {
+              type: 'submit', disabled: loading,
+              className: 'w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition'
+            }, loading ? 'Creando cuenta...' : 'Crear Cuenta')
+          ),
+
+          React.createElement('div', { className: 'relative my-6' },
+            React.createElement('div', { className: 'absolute inset-0 flex items-center' },
+              React.createElement('div', { className: 'w-full border-t border-gray-200 dark:border-gray-700' })
+            ),
+            React.createElement('div', { className: 'relative flex justify-center text-xs' },
+              React.createElement('span', { className: 'bg-white px-2 text-gray-500 dark:bg-gray-900 dark:text-gray-400' }, 'Ya tienes cuenta?')
+            )
+          ),
+          React.createElement('a', { href: '/signin', className: 'block w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-center text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition' }, 'Iniciar Sesion')
+        )
+      )
+    );
+  }
+
+  const root = document.getElementById('auth-root');
+  if (root) {
+    createRoot(root).render(React.createElement(SignUpForm));
+  }
+</script>

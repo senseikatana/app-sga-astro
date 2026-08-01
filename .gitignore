@@ -1,0 +1,31 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.local
+data/
+bot_sessions/
+bot_db.json
+baileys.log
+bot.qr.png
+bot_db_test.json
+test_auth2/
+creds.json
+
+# clerk configuration (can include secrets)
+/.clerk/
+
+# InsForge & AI agent skills
+.insforge
+.agent
+.agents
+.augment
+.claude
+.cline
+.github/copilot*
+.kilocode
+.qoder
+.qwen
+.roo
+.trae
+.windsurf

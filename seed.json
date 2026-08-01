@@ -1,0 +1,29 @@
+{
+  "users": [
+    {
+      "email": "admin@esinsa.com",
+      "password": "Admin123!",
+      "displayName": "Admin ESINSA"
+    },
+    {
+      "email": "operator@esinsa.com",
+      "password": "Operator123!",
+      "displayName": "Operator ESINSA"
+    },
+    {
+      "email": "warehouse@esinsa.com",
+      "password": "Warehouse123!",
+      "displayName": "Warehouse Manager"
+    },
+    {
+      "email": "logistics@esinsa.com",
+      "password": "Logistics123!",
+      "displayName": "Logistics User"
+    },
+    {
+      "email": "viewer@esinsa.com",
+      "password": "Viewer123!",
+      "displayName": "Viewer User"
+    }
+  ]
+}
