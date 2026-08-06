@@ -11,30 +11,15 @@ import {
 
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'warehouseflow-app-id';
 
-const callGeminiAPI = async (prompt) => {
-  const apiKey = ""; 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-  const payload = {
-    contents: [{ parts: [{ text: prompt }] }],
-    systemInstruction: { parts: [{ text: "Eres el experto AI de WarehouseFlow. Responde estrictamente lo que se pide, de forma profesional, concisa y en formato JSON si se solicita." }] }
-  };
-
-  const retries = [1000, 2000, 4000];
-  for (let i = 0; i < retries.length; i++) {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (!response.ok) throw new Error('API Error');
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text || "Sin respuesta.";
-    } catch (err) {
-      if (i === retries.length - 1) throw err;
-      await new Promise(res => setTimeout(res, retries[i]));
-    }
-  }
+const callBackendAI = async (prompt) => {
+  const response = await fetch('/api/ai', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question: prompt, lang: 'es' }),
+  });
+  if (!response.ok) throw new Error('API Error');
+  const data = await response.json();
+  return data.reply || 'Sin respuesta.';
 };
 
 class SKUGenerator {
@@ -116,7 +101,7 @@ const CrudView = ({ entityKey, title, data, fields, onSave, onDelete, onBatchDel
     setAiFilling(true);
     try {
       const prompt = `Genera un registro ficticio muy realista para almacén. Tabla: "${entityKey}". Devuelve ÚNICAMENTE JSON válido con claves: ${fields.map(f => f.key).join(', ')}. Opciones select: ${fields.filter(f => f.type === 'select').map(f => `${f.key}: ${f.options.join('|')}`).join('\n')}. Sin markdown.`;
-      const res = await callGeminiAPI(prompt);
+      const res = await callBackendAI(prompt);
       setFormData(JSON.parse(res.replace(/```json/g, '').replace(/```/g, '').trim()));
     } catch (e) { alert("Error IA."); }
     setAiFilling(false);
@@ -326,7 +311,7 @@ export default function App() {
     const text = copilotInput.trim();
     setCopilotInput('');
     setCopilotMessages(p => [...p, { role: 'user', text }]);
-    const res = await callGeminiAPI(`Contexto almacén: ${dbState.inventory.length} SKUs. Responde breve. Pregunta: ${text}`);
+    const res = await callBackendAI(`Contexto almacén: ${dbState.inventory.length} SKUs. Responde breve. Pregunta: ${text}`);
     setCopilotMessages(p => [...p, { role: 'model', text: res }]);
   };
 
@@ -379,7 +364,7 @@ export default function App() {
               </div>
               <div className="bg-indigo-900 rounded-2xl p-6 text-white relative">
                  <h3 className="text-xl font-bold flex items-center mb-4"><Sparkles className="mr-2 text-yellow-400"/> IA Logistics Report</h3>
-                 <button onClick={async () => { setGeneratingAi(true); setAiReport(await callGeminiAPI(`Resume el estado con ${dbState.inventory.length} SKUs`)); setGeneratingAi(false); }} className="bg-white/20 px-4 py-2 rounded-lg text-sm">{generatingAi ? 'Analizando...' : 'Generar Reporte'}</button>
+                 <button onClick={async () => { setGeneratingAi(true); setAiReport(await callBackendAI(`Resume el estado con ${dbState.inventory.length} SKUs`)); setGeneratingAi(false); }} className="bg-white/20 px-4 py-2 rounded-lg text-sm">{generatingAi ? 'Analizando...' : 'Generar Reporte'}</button>
                  {aiReport && <p className="mt-4 text-sm bg-black/20 p-4 rounded-lg">{aiReport}</p>}
               </div>
             </div>
