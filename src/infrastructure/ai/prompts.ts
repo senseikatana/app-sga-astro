@@ -6,8 +6,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { WarehouseSnapshot } from '@/domain/ai/ports';
-
-const LOW_STOCK_THRESHOLD = Number(import.meta.env.JARVIS_LOW_STOCK_THRESHOLD) || 100;
+import { LOW_STOCK_THRESHOLD } from '@/shared/constants';
 
 let faqCache: string | null = null;
 function getFaqKnowledge(): string {

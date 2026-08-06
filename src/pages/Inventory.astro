@@ -127,6 +127,7 @@ import AutoCrud from '../components/AutoCrud';
   import { seedGenerators } from '../lib/stores';
   import { generateExpeditionLabelsPdf } from '../infrastructure/printing/jsPdfLabelGenerator';
   import { exportRowsToExcel, readExcelFile } from '../infrastructure/office/xlsx';
+  import { todayStamp } from '../shared/dates';
 
   // === Seed counters from any existing persisted data ===
   seedGenerators();
@@ -252,7 +253,7 @@ import AutoCrud from '../components/AutoCrud';
   btnExport.addEventListener('click', () => {
     const items = useInventoryStore.getState().items;
     exportRowsToExcel(
-      `Inventario_${new Date().toISOString().split('T')[0]}.xlsx`,
+      `Inventario_${todayStamp()}.xlsx`,
       'Inventario Esinsa',
       items.map(i => ({
         NUTCODE: i.nutcode,

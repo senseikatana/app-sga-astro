@@ -67,6 +67,7 @@ import AutoCrud from '../components/AutoCrud';
   import { seedGenerators } from '../lib/stores';
   import { generateAlbaranPdf, generateShippingLabelPdf } from '../infrastructure/printing/jsPdfLabelGenerator';
   import { exportRowsToExcel, readExcelFile } from '../infrastructure/office/xlsx';
+  import { todayStamp } from '../shared/dates';
 
   // Seed counters from any existing persisted data
   seedGenerators();
@@ -92,7 +93,7 @@ import AutoCrud from '../components/AutoCrud';
   btnExport.addEventListener('click', () => {
     const orders = useOrdersStore.getState().items;
     exportRowsToExcel(
-      `Pedidos_${new Date().toISOString().split('T')[0]}.xlsx`,
+      `Pedidos_${todayStamp()}.xlsx`,
       'Pedidos CRM',
       orders.map(o => ({
         ID_Pedido: o.number,

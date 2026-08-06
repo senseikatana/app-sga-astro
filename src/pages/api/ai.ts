@@ -4,12 +4,13 @@
 import type { APIRoute } from 'astro';
 import { askJarvisUseCase } from '@/infrastructure/ai';
 import { getWarehouseData, type WarehouseData } from '@/lib/server-data';
+import { SUPPORTED_LANGS } from '@/shared/constants';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
     const question = String(body?.question ?? body?.context ?? '').trim();
-    const lang = ['es', 'en', 'ca'].includes(body?.lang) ? body.lang : 'es';
+    const lang = (SUPPORTED_LANGS as readonly string[]).includes(body?.lang) ? body.lang : 'es';
 
     if (!question) {
       return new Response(JSON.stringify({ error: 'Pregunta vacía' }), {

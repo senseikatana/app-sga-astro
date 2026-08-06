@@ -4,8 +4,7 @@
  * Always available, so JARVIS never goes down.
  */
 import type { AssistantProvider, AssistantRequest } from '@/domain/ai/ports';
-
-const LOW_STOCK_THRESHOLD = Number(import.meta.env.JARVIS_LOW_STOCK_THRESHOLD) || 100;
+import { LOW_STOCK_THRESHOLD } from '@/shared/constants';
 
 export class LocalRulesProvider implements AssistantProvider {
   readonly name = 'local' as const;

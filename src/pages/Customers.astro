@@ -113,6 +113,7 @@ import AutoCrud from '../components/AutoCrud';
   import { useCustomersStore } from '../lib/stores';
   import { seedGenerators } from '../lib/stores';
   import { exportRowsToExcel, readExcelFile } from '../infrastructure/office/xlsx';
+  import { todayStamp } from '../shared/dates';
 
   // Seed counters from any existing persisted data
   seedGenerators();
@@ -125,7 +126,7 @@ import AutoCrud from '../components/AutoCrud';
   btnExport.addEventListener('click', () => {
     const customers = useCustomersStore.getState().items;
     exportRowsToExcel(
-      `Clientes_CRM_${new Date().toISOString().split('T')[0]}.xlsx`,
+      `Clientes_CRM_${todayStamp()}.xlsx`,
       'Clientes CRM',
       customers.map(c => ({
         Nombre: c.name,
