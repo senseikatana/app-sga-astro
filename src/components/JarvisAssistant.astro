@@ -214,44 +214,13 @@
     }
 
     private startRealtimeSync() {
-      // Subscribe to store changes
-      useInventoryStore.subscribe(() => { this.updateContext(); this.schedulePushToServer(); });
-      useOrdersStore.subscribe(() => { this.updateContext(); this.schedulePushToServer(); });
-      useCustomersStore.subscribe(() => { this.updateContext(); this.schedulePushToServer(); });
+      // Subscribe to store changes to keep the chat stats fresh
+      useInventoryStore.subscribe(() => this.updateContext());
+      useOrdersStore.subscribe(() => this.updateContext());
+      useCustomersStore.subscribe(() => this.updateContext());
 
-      // Auto-refresh every 30 seconds + sync al servidor cada 5 min
+      // Auto-refresh every 30 seconds
       setInterval(() => this.updateContext(), 30000);
-      setInterval(() => this.pushDataToServer(), 5 * 60 * 1000);
-
-      // Primera sincronización al cargar
-      this.pushDataToServer();
-    }
-
-    // ============================================================
-    // Sincronización navegador → servidor (para JARVIS 24/7 y WhatsApp)
-    // ============================================================
-    private pushTimer: ReturnType<typeof setTimeout> | null = null;
-
-    private schedulePushToServer() {
-      if (this.pushTimer) clearTimeout(this.pushTimer);
-      this.pushTimer = setTimeout(() => this.pushDataToServer(), 3000);
-    }
-
-    private async pushDataToServer() {
-      if (!this.context) return;
-      try {
-        await fetch('/api/sync-data', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            inventory: this.context.inventory,
-            orders: this.context.orders,
-            customers: this.context.customers,
-          }),
-        });
-      } catch {
-        // Servidor no disponible (modo estático); JARVIS sigue funcionando local
-      }
     }
 
     // ============================================================
@@ -269,11 +238,6 @@
           body: JSON.stringify({
             question,
             lang,
-            data: {
-              inventory: this.context?.inventory ?? [],
-              orders: this.context?.orders ?? [],
-              customers: this.context?.customers ?? [],
-            },
           }),
         });
         clearTimeout(timeout);

@@ -1,9 +1,9 @@
-// Endpoint principal de JARVIS para el dashboard web.
-// El navegador puede enviar su propio contexto (datos locales) o el servidor
-// usará su copia sincronizada en data/warehouse.json.
+// Endpoint principal de JARVIS para el dashboard web, el bot de WhatsApp y el
+// webhook. Responde siempre desde la fuente de verdad (PostgreSQL / Neon), sin
+// depender de que un navegador haya abierto la app.
 import type { APIRoute } from 'astro';
 import { askJarvisUseCase } from '@/infrastructure/ai';
-import { getWarehouseData, type WarehouseData } from '@/lib/server-data';
+import { loadWarehouseSnapshot } from '@/infrastructure/persistence/snapshot';
 import { SUPPORTED_LANGS } from '@/shared/constants';
 
 export const POST: APIRoute = async ({ request }) => {
@@ -19,16 +19,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    // Contexto enviado por el navegador (datos frescos) o copia del servidor
-    const hasClientData = Array.isArray(body?.data?.inventory);
-    const data: WarehouseData = hasClientData
-      ? {
-          inventory: body.data.inventory ?? [],
-          orders: body.data.orders ?? [],
-          customers: body.data.customers ?? [],
-          updatedAt: new Date().toISOString(),
-        }
-      : getWarehouseData();
+    const data = await loadWarehouseSnapshot();
 
     const { reply, source } = await askJarvisUseCase.ask({ question, data, lang });
 

@@ -1,10 +1,10 @@
 // Health check requerido por render.yaml (healthCheckPath: /api/health)
 import type { APIRoute } from 'astro';
-import { getWarehouseData } from '@/lib/server-data';
+import { loadWarehouseSnapshot } from '@/infrastructure/persistence/snapshot';
 import { activeJarvisProvider } from '@/infrastructure/ai';
 
 export const GET: APIRoute = async () => {
-  const data = getWarehouseData();
+  const data = await loadWarehouseSnapshot();
   return new Response(JSON.stringify({
     status: 'ok',
     jarvis: activeJarvisProvider(),
