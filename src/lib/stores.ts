@@ -6,7 +6,7 @@ import {
   fetchInventory, insertInventory, updateInventory, deleteInventory,
   fetchOrders, insertOrder, updateOrder, deleteOrder,
   fetchCustomers, insertCustomer, updateCustomer, deleteCustomer,
-} from './insforge-data';
+} from '@/infrastructure/persistence/http/client-data';
 
 const SEED_INVENTORY = [
   { id: 'INV001', nutcode: 'NUT0004001', desc: 'Junta espiral DN80 PN16', type: 'Juntas' as const, stock: 45, loc: 'A-01-03', minStock: 100 },
