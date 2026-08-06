@@ -7,38 +7,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-  import React, { useState, useEffect, FormEvent } from 'react';
+  import React, { useState, useEffect, type FormEvent } from 'react';
   import { createRoot } from 'react-dom/client';
-  import { createClient } from '@insforge/sdk';
-
-  const insforge = createClient({
-    baseUrl: import.meta.env.PUBLIC_INSFORGE_URL,
-    anonKey: import.meta.env.PUBLIC_INSFORGE_ANON_KEY,
-  });
+  import { useAuth } from '../components/AuthProvider';
 
   function SignUpForm() {
-    const [step, setStep] = useState<'form' | 'verify'>('form');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [otp, setOtp] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const [checking, setChecking] = useState(true);
+
+    const { user, loading: checking, signUp, signInWithOAuth } = useAuth();
 
     useEffect(() => {
-      (async () => {
-        try {
-          const { data } = await insforge.auth.getCurrentUser();
-          if (data?.user) {
-            window.location.href = '/';
-            return;
-          }
-        } catch {}
-        setChecking(false);
-      })();
-    }, []);
+      if (!checking && user) {
+        window.location.href = '/';
+      }
+    }, [user, checking]);
 
     const handleSignUp = async (e: FormEvent) => {
       e.preventDefault();
@@ -56,76 +43,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       setLoading(true);
       try {
-        const { data, error: authError } = await insforge.auth.signUp({
-          email,
-          password,
-          name,
-          redirectTo: 'http://localhost:4321/signin',
-        });
+        const { error: authError } = await signUp(email, password, name);
 
         if (authError) {
-          setError(authError.message || 'Error al registrar');
+          setError(authError);
           setLoading(false);
           return;
         }
 
-        if (data?.requireEmailVerification) {
-          setStep('verify');
-          setLoading(false);
-          return;
-        }
-
-        if (data?.accessToken) {
-          window.location.href = '/';
-        }
+        window.location.href = '/';
       } catch (e: any) {
         setError(e.message || 'Error al registrar');
         setLoading(false);
       }
     };
 
-    const handleVerify = async (e: FormEvent) => {
-      e.preventDefault();
-      setError('');
-      setLoading(true);
-
-      try {
-        const { data, error: verifyError } = await insforge.auth.verifyEmail({
-          email,
-          otp,
-        });
-
-        if (verifyError) {
-          setError(verifyError.message || 'Código inválido o expirado');
-          setLoading(false);
-          return;
-        }
-
-        if (data?.accessToken) {
-          window.location.href = '/';
-        }
-      } catch (e: any) {
-        setError(e.message || 'Error al verificar');
-        setLoading(false);
-      }
-    };
-
-    const handleResendCode = async () => {
-      try {
-        await insforge.auth.resendVerificationEmail({
-          email,
-          redirectTo: 'http://localhost:4321/signin',
-        });
-        alert('Código reenviado a tu email');
-      } catch (e: any) {
-        setError('Error al reenviar código');
-      }
-    };
-
     const handleOAuth = async (provider: 'google' | 'github' | 'microsoft') => {
-      await insforge.auth.signInWithOAuth(provider, {
-        redirectTo: 'http://localhost:4321',
-      });
+      await signInWithOAuth(provider);
     };
 
     if (checking) {
@@ -151,49 +85,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       React.createElement('h1', { className: 'mt-4 text-2xl font-bold text-gray-900 dark:text-white' }, 'ESINSA WMS'),
       React.createElement('p', { className: 'mt-1 text-sm text-gray-500 dark:text-gray-400' }, 'Nuevo registro de operario')
     );
-
-    if (step === 'verify') {
-      return React.createElement('div', { className: 'relative min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950' },
-        bgImage,
-        React.createElement('div', { className: 'relative z-10 mx-auto max-w-lg px-4 py-16 w-full' },
-          header,
-          React.createElement('div', { className: 'mt-8 rounded-xl border border-gray-200 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-8 shadow-xl' },
-            React.createElement('h2', { className: 'text-lg font-semibold text-gray-900 dark:text-white' }, 'Verificar Email'),
-            React.createElement('p', { className: 'mt-1 text-sm text-gray-500 dark:text-gray-400' }, `Hemos enviado un código de 6 dígitos a ${email}`),
-
-            error && React.createElement('div', { className: 'mt-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-3 text-sm text-red-700 dark:text-red-400' }, error),
-
-            React.createElement('form', { onSubmit: handleVerify, className: 'mt-6 space-y-4' },
-              React.createElement('div', null,
-                React.createElement('label', { className: 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1' }, 'Código de verificación'),
-                React.createElement('input', {
-                  type: 'text', required: true, value: otp, maxLength: 6,
-                  onChange: (e: any) => setOtp(e.target.value.replace(/\D/g, '')),
-                  className: 'w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-center text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none text-lg tracking-[0.5em] font-mono',
-                  placeholder: '000000'
-                })
-              ),
-              React.createElement('button', {
-                type: 'submit', disabled: loading,
-                className: 'w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition'
-              }, loading ? 'Verificando...' : 'Verificar Código')
-            ),
-            React.createElement('div', { className: 'mt-4 text-center' },
-              React.createElement('button', {
-                type: 'button', onClick: handleResendCode,
-                className: 'text-sm text-indigo-600 hover:text-indigo-500 dark:text-indigo-400'
-              }, 'Reenviar código')
-            ),
-            React.createElement('div', { className: 'mt-4 text-center' },
-              React.createElement('button', {
-                type: 'button', onClick: () => setStep('form'),
-                className: 'text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-              }, '← Volver al formulario')
-            )
-          )
-        )
-      );
-    }
 
     return React.createElement('div', { className: 'relative min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950' },
       bgImage,
@@ -232,7 +123,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 className: 'w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:outline-none',
                 placeholder: 'Mín. 8 caracteres'
               }),
-              React.createElement('p', { className: 'mt-1 text-xs text-gray-500 dark:text-gray-400' }, 'Debe incluir mayúscula, minúscula, número y carácter especial')
+              React.createElement('p', { className: 'mt-1 text-xs text-gray-500 dark:text-gray-400' }, 'Debe tener al menos 8 caracteres')
             ),
             React.createElement('div', null,
               React.createElement('label', { className: 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1' }, 'Confirmar contraseña'),

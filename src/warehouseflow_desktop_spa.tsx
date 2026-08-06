@@ -9,15 +9,6 @@ import {
   Link as LinkIcon, Cpu, UserCog, Square, CheckSquare, ListChecks, Menu
 } from 'lucide-react';
 
-// Firebase Imports
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, writeBatch } from 'firebase/firestore';
-
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'warehouseflow-app-id';
 
 const callGeminiAPI = async (prompt) => {
@@ -298,15 +289,17 @@ export default function App() {
   const [dbState, setDbState] = useState({ inventory: [], inOrders: [], outOrders: [], routes: [], crm: [], users: [] });
 
   useEffect(() => {
-    signInAnonymously(auth).finally(() => setFirebaseUser(auth.currentUser));
-    return onAuthStateChanged(auth, setFirebaseUser);
+    // Firebase auth and snapshot logic removed
+    // Fallback static mock data to avoid breaking the UI for now
+    setDbState({
+      inventory: [{ id: '1', sku: 'GEN-XX-1234', name: 'Producto Mock', abcClass: 'A', stock: 100, min: 20, status: 'OK' }],
+      inOrders: [],
+      outOrders: [],
+      routes: [],
+      crm: [],
+      users: []
+    });
   }, []);
-
-  useEffect(() => {
-    if (!firebaseUser) return;
-    const unsubs = Object.keys(dbState).map(col => onSnapshot(collection(db, 'artifacts', appId, 'users', firebaseUser.uid, col), snap => setDbState(p => ({...p, [col]: snap.docs.map(d => ({id: d.id, ...d.data()}))}))));
-    return () => unsubs.forEach(u => u());
-  }, [firebaseUser]);
 
   const schemas = {
     inventory: [
@@ -392,7 +385,7 @@ export default function App() {
             </div>
           ) : currentView === 'picking' ? <AdvancedPickingView dbState={dbState} /> 
             : currentView === 'whatsapp' ? <WhatsAppAgentView /> 
-            : schemas[currentView] && <CrudView entityKey={currentView} title={t[currentView]} data={dbState[currentView]} fields={schemas[currentView]} onSave={(d,id) => {if(id) updateDoc(doc(db, 'artifacts', appId, 'users', firebaseUser.uid, currentView, id), d); else addDoc(collection(db, 'artifacts', appId, 'users', firebaseUser.uid, currentView), {...d, createdAt: Date.now()});}} onDelete={(id) => deleteDoc(doc(db, 'artifacts', appId, 'users', firebaseUser.uid, currentView, id))} onBatchDelete={(ids) => {const b=writeBatch(db); ids.forEach(i=>b.delete(doc(db, 'artifacts', appId, 'users', firebaseUser.uid, currentView, i))); b.commit();}} onInjectMock={async(n)=>{const res=await callGeminiAPI(`Genera JSON array de ${n} objetos. Claves: ${schemas[currentView].map(f=>f.key).join(', ')}. Sin markdown.`); const arr=JSON.parse(res.replace(/```json/g, '').replace(/```/g, '').trim()); const b=writeBatch(db); const ref=collection(db, 'artifacts', appId, 'users', firebaseUser.uid, currentView); arr.forEach(i=>b.set(doc(ref), {...i, createdAt:Date.now()})); b.commit();}} totalGlobalRecords={0} t={t} />
+            : schemas[currentView] && <CrudView entityKey={currentView} title={t[currentView]} data={dbState[currentView]} fields={schemas[currentView]} onSave={(d,id) => { console.log('Save mock', d) }} onDelete={(id) => { console.log('Delete mock', id) }} onBatchDelete={(ids) => { console.log('Batch delete mock', ids) }} onInjectMock={async(n)=>{ console.log('Mock inject') }} totalGlobalRecords={0} t={t} />
           }
         </div>
 

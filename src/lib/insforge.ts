@@ -1,15 +1,16 @@
-import { createClient } from '@insforge/sdk';
+// MOCKED INSFORGE CLIENT
+export const insforge = {
+  db: {
+    from: () => ({
+      select: async () => ({ data: [], error: null }),
+      insert: async () => ({ data: null, error: null }),
+      update: async () => ({ data: null, error: null }),
+      delete: async () => ({ data: null, error: null }),
+      eq: () => ({ select: async () => ({ data: [], error: null }) })
+    })
+  }
+};
 
-export const insforge = createClient({
-  baseUrl: import.meta.env.PUBLIC_INSFORGE_URL,
-  anonKey: import.meta.env.PUBLIC_INSFORGE_ANON_KEY,
-});
-
-// Server-side admin client (for privileged operations)
 export function getAdminClient() {
-  const { createAdminClient } = require('@insforge/sdk');
-  return createAdminClient({
-    baseUrl: import.meta.env.INSFORGE_URL || import.meta.env.PUBLIC_INSFORGE_URL,
-    apiKey: import.meta.env.INSFORGE_API_KEY,
-  });
+  return insforge;
 }

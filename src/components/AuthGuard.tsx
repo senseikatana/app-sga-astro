@@ -1,43 +1,28 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { createClient } from '@insforge/sdk';
-
-const insforge = createClient({
-  baseUrl: import.meta.env.PUBLIC_INSFORGE_URL,
-  anonKey: import.meta.env.PUBLIC_INSFORGE_ANON_KEY,
-});
+import { useEffect, type ReactNode } from 'react';
+import { useAuth } from './AuthProvider';
 
 interface AuthGuardProps {
   children: ReactNode;
 }
 
 export default function AuthGuard({ children }: AuthGuardProps) {
-  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
+  const { user, loading } = useAuth();
+  
+  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  const publicPaths = ['/signin', '/signup', '/ForgotPassword', '/landing'];
+  const isPublic = publicPaths.includes(currentPath);
 
   useEffect(() => {
-    let cancelled = false;
-    const currentPath = window.location.pathname;
-
-    // Don't guard auth pages
-    const publicPaths = ['/signin', '/signup', '/ForgotPassword', '/landing'];
-    if (publicPaths.includes(currentPath)) {
-      setAuthenticated(true);
-      return;
+    if (!loading && !user && !isPublic) {
+      window.location.replace('/signin');
     }
+  }, [user, loading, isPublic]);
 
-    (async () => {
-      try {
-        const { data } = await insforge.auth.getCurrentUser();
-        if (!cancelled) setAuthenticated(!!data?.user);
-      } catch {
-        if (!cancelled) setAuthenticated(false);
-      }
-    })();
+  if (isPublic) {
+    return <>{children}</>;
+  }
 
-    return () => { cancelled = true; };
-  }, []);
-
-  // Loading state
-  if (authenticated === null) {
+  if (loading || !user) {
     return (
       <div className="flex items-center justify-center h-screen bg-white dark:bg-gray-900">
         <div className="text-center">
@@ -46,15 +31,6 @@ export default function AuthGuard({ children }: AuthGuardProps) {
         </div>
       </div>
     );
-  }
-
-  // Not authenticated — redirect to signin (only once)
-  if (!authenticated) {
-    const currentPath = window.location.pathname;
-    if (currentPath !== '/signin') {
-      window.location.replace('/signin');
-    }
-    return null;
   }
 
   return <>{children}</>;

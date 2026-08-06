@@ -5,7 +5,7 @@
 Backend-as-a-service (BaaS) platform providing:
 
 - **Database**: PostgreSQL with PostgREST API
-- **Authentication**: Email/password + OAuth (Google, GitHub)
+- **Authentication**: Better Auth (InsForge auth is intentionally bypassed/disabled)
 - **Storage**: File upload/download
 - **AI**: OpenRouter key provisioning and model catalog for direct OpenAI-compatible integrations
 - **Functions**: Serverless function deployment
@@ -66,11 +66,7 @@ Available documentation types:
 - `"instructions"` - Essential backend setup (START HERE)
 - `"real-time"` - Real-time pub/sub (database + client events) via WebSockets
 - `"db-sdk-typescript"` - Database operations with TypeScript SDK
-- **Authentication** - Choose based on implementation:
-  - `"auth-sdk-typescript"` - TypeScript SDK methods for custom auth flows
-  - `"auth-components-react"` - Pre-built auth UI for React+Vite (single-page app)
-  - `"auth-components-react-router"` - Pre-built auth UI for React(Vite+React Router) (multi-page app)
-  - `"auth-components-nextjs"` - Pre-built auth UI for Next.js (SSR app)
+- **Authentication** - We use **Better Auth** instead of InsForge SDK. Do NOT use InsForge for authentication.
 - `"storage-sdk"` - File storage operations
 - `"functions-sdk"` - Serverless functions invocation
 - `"ai-integration-sdk"` - AI integration with the provisioned OpenRouter key and OpenAI SDK
@@ -104,7 +100,7 @@ Payments currently has TypeScript SDK docs only. Use the Payments API reference 
 
 ### Always SDK for Application Logic:
 
-- Authentication (register, login, logout, profiles)
+- Authentication is handled exclusively by **Better Auth** (Do NOT use SDK for auth)
 - Database CRUD (select, insert, update, delete)
 - Storage operations (upload, download files)
 - AI integration via the provisioned OpenRouter key with the OpenAI SDK or OpenRouter HTTP API

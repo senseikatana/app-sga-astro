@@ -7,53 +7,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-  import React, { useState, useEffect, FormEvent } from 'react';
+  import React, { useState, useEffect, type FormEvent } from 'react';
   import { createRoot } from 'react-dom/client';
-  import { createClient } from '@insforge/sdk';
-
-  const insforge = createClient({
-    baseUrl: import.meta.env.PUBLIC_INSFORGE_URL,
-    anonKey: import.meta.env.PUBLIC_INSFORGE_ANON_KEY,
-  });
+  import { useAuth } from '../components/AuthProvider';
 
   function SignInForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const [checking, setChecking] = useState(true);
+    
+    const { user, loading: checking, signIn, signInWithOAuth } = useAuth();
 
     useEffect(() => {
-      (async () => {
-        try {
-          const { data } = await insforge.auth.getCurrentUser();
-          if (data?.user) {
-            window.location.href = '/';
-            return;
-          }
-        } catch {}
-        setChecking(false);
-      })();
-    }, []);
+      if (!checking && user) {
+        window.location.href = '/';
+      }
+    }, [user, checking]);
 
     const handleSubmit = async (e: FormEvent) => {
       e.preventDefault();
       setError('');
       setLoading(true);
       try {
-        const { data, error: authError } = await insforge.auth.signInWithPassword({ email, password });
+        const { error: authError } = await signIn(email, password);
         if (authError) {
-          if (authError.statusCode === 403) {
-            setError('Email no verificado. Revisa tu bandeja de entrada.');
-          } else {
-            setError(authError.message || 'Credenciales incorrectas');
-          }
+          setError(authError);
           setLoading(false);
           return;
         }
-        if (data?.accessToken) {
-          window.location.href = '/';
-        }
+        window.location.href = '/';
       } catch (e: any) {
         setError(e.message || 'Error al iniciar sesión');
         setLoading(false);
@@ -61,9 +44,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     };
 
     const handleOAuth = async (provider: 'google' | 'github' | 'microsoft') => {
-      await insforge.auth.signInWithOAuth(provider, {
-        redirectTo: 'http://localhost:4321',
-      });
+      await signInWithOAuth(provider);
     };
 
     if (checking) {

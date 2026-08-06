@@ -29,3 +29,5 @@ creds.json
 .roo
 .trae
 .windsurf
+
+/generated/prisma
