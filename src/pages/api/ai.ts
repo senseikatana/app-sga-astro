@@ -2,7 +2,7 @@
 // El navegador puede enviar su propio contexto (datos locales) o el servidor
 // usará su copia sincronizada en data/warehouse.json.
 import type { APIRoute } from 'astro';
-import { askJarvis } from '@/services/jarvis.service';
+import { askJarvisUseCase } from '@/infrastructure/ai';
 import { getWarehouseData, type WarehouseData } from '@/lib/server-data';
 
 export const POST: APIRoute = async ({ request }) => {
@@ -29,7 +29,7 @@ export const POST: APIRoute = async ({ request }) => {
         }
       : getWarehouseData();
 
-    const { reply, source } = await askJarvis(question, data, lang);
+    const { reply, source } = await askJarvisUseCase.ask({ question, data, lang });
 
     return new Response(JSON.stringify({ success: true, reply, source }), {
       status: 200,

@@ -3,7 +3,7 @@
 // GET  → verificación del webhook (Meta envía hub.challenge)
 // POST → mensajes entrantes de clientes → JARVIS responde automáticamente
 import type { APIRoute } from 'astro';
-import { askJarvis } from '@/services/jarvis.service';
+import { askJarvisUseCase } from '@/infrastructure/ai';
 import { sendWhatsAppMessage, parseWebhookMessages } from '@/services/whatsapp.service';
 import { getWarehouseData } from '@/lib/server-data';
 
@@ -44,7 +44,7 @@ export const POST: APIRoute = async ({ request }) => {
       }
 
       const data = getWarehouseData();
-      const { reply, source } = await askJarvis(msg.text, data, 'es');
+      const { reply, source } = await askJarvisUseCase.ask({ question: msg.text, data, lang: 'es' });
       const prefix = source === 'local' ? '' : '';
       await sendWhatsAppMessage(msg.from, `${prefix}${reply}`);
       console.log(`[whatsapp] Respondido a ${msg.from} (${source})`);

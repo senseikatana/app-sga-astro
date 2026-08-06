@@ -134,9 +134,6 @@
     inventory: any[];
     orders: any[];
     customers: any[];
-    lowStockItems: any[];
-    pendingOrders: any[];
-    locations: Map<string, any[]>;
   }
 
   class JarvisAssistant {
@@ -196,30 +193,7 @@
       const orders = useOrdersStore.getState().items;
       const customers = useCustomersStore.getState().items;
 
-      // Calculate low stock items (threshold: 100)
-      const lowStockItems = inventory.filter(item => item.stock < 100);
-
-      // Get pending orders
-      const pendingOrders = orders.filter(o => o.status === 'pending');
-
-      // Group by location
-      const locations = new Map<string, any[]>();
-      inventory.forEach(item => {
-        const loc = item.loc || 'Sin ubicación';
-        if (!locations.has(loc)) {
-          locations.set(loc, []);
-        }
-        locations.get(loc)!.push(item);
-      });
-
-      this.context = {
-        inventory,
-        orders,
-        customers,
-        lowStockItems,
-        pendingOrders,
-        locations
-      };
+      this.context = { inventory, orders, customers };
 
       this.updateStats();
     }
@@ -232,8 +206,9 @@
       const statOrders = document.getElementById('stat-orders');
       const status = document.getElementById('jarvis-status');
 
+      const lowStockItems = this.context.inventory.filter(item => item.stock < 100);
       if (statProducts) statProducts.textContent = this.context.inventory.length.toString();
-      if (statLowStock) statLowStock.textContent = this.context.lowStockItems.length.toString();
+      if (statLowStock) statLowStock.textContent = lowStockItems.length.toString();
       if (statOrders) statOrders.textContent = this.context.orders.length.toString();
       if (status) status.textContent = `Sincronizado • ${this.context.inventory.length} productos`;
     }
@@ -383,10 +358,12 @@
       // Show typing indicator
       this.showTyping();
 
-      // 1º intento: servidor (LLM con contexto completo). Fallback: reglas locales.
+      // 1º intento: servidor (LLM con contexto completo).
       const serverReply = await this.askServer(text);
       this.hideTyping();
-      const response = serverReply ?? this.processQuery(text);
+      const response =
+        serverReply ??
+        '⚠️ No he podido conectar con el servidor de JARVIS. Comprueba tu conexión e inténtalo de nuevo.';
       this.addMessage(response, false);
     }
 
@@ -416,120 +393,6 @@
 
     private hideTyping() {
       document.getElementById('jarvis-typing')?.remove();
-    }
-
-    private processQuery(query: string): string {
-      if (!this.context) return 'Cargando datos...';
-
-      const q = query.toLowerCase();
-
-      // Stock bajo
-      if (q.includes('stock bajo') || q.includes('bajo stock') || q.includes('sin stock')) {
-        const items = this.context.lowStockItems;
-        if (items.length === 0) {
-          return '✅ <strong>Excelente noticia:</strong> No hay productos con stock bajo. Todos los niveles están por encima del umbral de 100 unidades.';
-        }
-        
-        let response = `⚠️ <strong>Alerta de Stock Bajo:</strong> He encontrado ${items.length} producto(s) con menos de 100 unidades:<br><br>`;
-        items.slice(0, 5).forEach(item => {
-          response += `• <strong>${item.nutcode}</strong> - ${item.desc}<br>&nbsp;&nbsp;Stock: <span class="text-red-500 font-bold">${item.stock}</span> uds | Ubicación: ${item.loc}<br>`;
-        });
-        if (items.length > 5) {
-          response += `<br>... y ${items.length - 5} más. ¿Quieres que genere un reporte completo?`;
-        }
-        return response;
-      }
-
-      // Ubicaciones
-      if (q.includes('ubicación') || q.includes('ubicaciones') || q.includes('donde está')) {
-        const locs = Array.from(this.context.locations.entries());
-        if (locs.length === 0) {
-          return '📍 No hay ubicaciones registradas en el sistema.';
-        }
-        
-        let response = `📍 <strong>Mapa de Ubicaciones:</strong> Tengo registradas ${locs.length} ubicaciones activas:<br><br>`;
-        locs.slice(0, 6).forEach(([loc, items]) => {
-          const totalStock = items.reduce((sum, i) => sum + i.stock, 0);
-          response += `• <strong>${loc}</strong>: ${items.length} referencias (${totalStock} uds totales)<br>`;
-        });
-        if (locs.length > 6) {
-          response += `<br>... y ${locs.length - 6} ubicaciones más.`;
-        }
-        return response;
-      }
-
-      // Pedidos pendientes
-      if (q.includes('pedido') || q.includes('pendiente') || q.includes('orden')) {
-        const pending = this.context.pendingOrders;
-        if (pending.length === 0) {
-          return '✅ <strong>Todo al día:</strong> No hay pedidos pendientes de procesar.';
-        }
-        
-        let response = `📦 <strong>Pedidos Pendientes:</strong> Hay ${pending.length} pedido(s) esperando procesamiento:<br><br>`;
-        pending.slice(0, 5).forEach(order => {
-          response += `• <strong>${order.number}</strong> - ${order.customer}<br>&nbsp;&nbsp;Importe: €${order.amount.toFixed(2)}<br>`;
-        });
-        return response;
-      }
-
-      // Resumen general
-      if (q.includes('resumen') || q.includes('estado') || q.includes('general') || q.includes('analiza')) {
-        const inv = this.context.inventory;
-        const totalStock = inv.reduce((sum, i) => sum + i.stock, 0);
-        const avgStock = inv.length > 0 ? Math.round(totalStock / inv.length) : 0;
-        const categories = [...new Set(inv.map(i => i.type))];
-        
-        return `📊 <strong>Resumen Ejecutivo del Almacén:</strong><br><br>
-          • <strong>Inventario total:</strong> ${inv.length} referencias únicas<br>
-          • <strong>Stock acumulado:</strong> ${totalStock.toLocaleString()} unidades<br>
-          • <strong>Stock promedio:</strong> ${avgStock} uds/referencia<br>
-          • <strong>Categorías:</strong> ${categories.join(', ')}<br>
-          • <strong>Alertas de stock:</strong> ${this.context.lowStockItems.length} productos<br>
-          • <strong>Pedidos activos:</strong> ${this.context.orders.length} (${this.context.pendingOrders.length} pendientes)<br>
-          • <strong>Clientes registrados:</strong> ${this.context.customers.length}<br><br>
-          <em>¿Necesitas profundizar en algún área específica?</em>`;
-      }
-
-      // Búsqueda por NUTCODE
-      if (q.includes('nut') || q.match(/nut\d+/i)) {
-        const match = q.match(/nut\d+/i);
-        if (match) {
-          const item = this.context.inventory.find(i => i.nutcode.toLowerCase() === match[0].toLowerCase());
-          if (item) {
-            const status = item.stock < 100 ? '<span class="text-red-500">⚠️ STOCK BAJO</span>' : '<span class="text-emerald-500">✅ STOCK OK</span>';
-            return `🔍 <strong>Producto Encontrado:</strong><br><br>
-              • <strong>NUTCODE:</strong> ${item.nutcode}<br>
-              • <strong>Descripción:</strong> ${item.desc}<br>
-              • <strong>Tipo:</strong> ${item.type}<br>
-              • <strong>Stock:</strong> ${item.stock} unidades ${status}<br>
-              • <strong>Ubicación:</strong> ${item.loc}<br><br>
-              ${item.stock < 50 ? '⚠️ <strong>Recomendación:</strong> Programar reposición urgente.' : ''}`;
-          } else {
-            return `❌ No he encontrado el producto con código <strong>${match[0]}</strong>. ¿Podrías verificar el código?`;
-          }
-        }
-      }
-
-      // Clientes
-      if (q.includes('cliente') || q.includes('customer')) {
-        const active = this.context.customers.filter(c => c.status === 'active');
-        return `👥 <strong>Base de Clientes:</strong><br><br>
-          • Total registrados: ${this.context.customers.length}<br>
-          • Activos: ${active.length}<br>
-          • En trial: ${this.context.customers.filter(c => c.status === 'trial').length}<br>
-          • Con pagos pendientes: ${this.context.customers.filter(c => c.status === 'past-due').length}<br><br>
-          ¿Necesitas contactar con algún cliente específico?`;
-      }
-
-      // Ayuda / Default
-      return `🤖 <strong>JARVIS a tu servicio.</strong> Puedo ayudarte con:<br><br>
-        • <strong>"stock bajo"</strong> - Ver productos con inventario crítico<br>
-        • <strong>"ubicaciones"</strong> - Mapa de ubicaciones del almacén<br>
-        • <strong>"pedidos pendientes"</strong> - Pedidos por procesar<br>
-        • <strong>"resumen"</strong> - Análisis ejecutivo completo<br>
-        • <strong>"NUT0001"</strong> - Buscar producto por código<br>
-        • <strong>"clientes"</strong> - Estado de la cartera de clientes<br><br>
-        <em>Estoy sincronizado en tiempo real con Excel/Sheet. ¿Qué necesitas?</em>`;
     }
   }
 
