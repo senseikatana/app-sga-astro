@@ -62,11 +62,11 @@ import AutoCrud from '../components/AutoCrud';
     />
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
   import { useOrdersStore } from '../lib/stores';
   import { seedGenerators } from '../lib/stores';
+  import { generateAlbaranPdf, generateShippingLabelPdf } from '../infrastructure/printing/jsPdfLabelGenerator';
+  import { exportRowsToExcel, readExcelFile } from '../infrastructure/office/xlsx';
 
   // Seed counters from any existing persisted data
   seedGenerators();
@@ -75,91 +75,13 @@ import AutoCrud from '../components/AutoCrud';
   window.generateAlbaran = (id) => {
     const order = useOrdersStore.getState().items.find(o => o.id === id);
     if (!order) return;
-    if (!window.jspdf) return alert('jsPDF no cargado.');
-    const { jsPDF } = window.jspdf;
-
-    // Albarán A4
-    const doc = new jsPDF({ format: 'a4' });
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text("ALBARÁN DE ENTREGA", 105, 20, { align: 'center' });
-
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-    doc.text("ESINSA GASKET", 20, 40);
-    doc.text("Pol. Ind. Riu Clar, Tarragona", 20, 46);
-
-    doc.setFont("helvetica", "bold");
-    doc.text(`Cliente: ${order.customer}`, 120, 40);
-    doc.text(`Nº Pedido: ${order.number}`, 120, 46);
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 120, 52);
-
-    doc.setLineWidth(0.5);
-    doc.line(20, 60, 190, 60);
-
-    doc.text("Descripción", 20, 70);
-    doc.text("Cantidad", 120, 70);
-    doc.text("Precio", 160, 70);
-
-    doc.line(20, 72, 190, 72);
-
-    doc.setFont("helvetica", "normal");
-    doc.text("Materiales de Sellado y Juntas (Varios)", 20, 82);
-    doc.text("1 Lote", 120, 82);
-    doc.text(`$${order.amount}`, 160, 82);
-
-    doc.line(20, 92, 190, 92);
-    doc.setFont("helvetica", "bold");
-    doc.text(`TOTAL: $${order.amount}`, 160, 102);
-
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("Firma del receptor: _______________________", 20, 250);
-
-    doc.save(`Albaran_${order.number}.pdf`);
+    generateAlbaranPdf(order, `Albaran_${order.number}.pdf`);
   };
 
   window.generateShippingLabel = (id) => {
     const order = useOrdersStore.getState().items.find(o => o.id === id);
     if (!order) return;
-    if (!window.jspdf) return alert('jsPDF no cargado.');
-    const { jsPDF } = window.jspdf;
-
-    // Etiqueta A6 Apaisada (Shipping label)
-    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a6' });
-
-    doc.setLineWidth(1);
-    doc.rect(5, 5, 138, 95);
-
-    doc.setFontSize(24);
-    doc.setFont("helvetica", "bold");
-    doc.text("ETIQUETA DE ENVÍO", 74, 20, { align: 'center' });
-
-    doc.setLineWidth(0.5);
-    doc.line(10, 25, 138, 25);
-
-    doc.setFontSize(14);
-    doc.text("REMITENTE:", 10, 35);
-    doc.setFont("helvetica", "normal");
-    doc.text("ESINSA GASKET\nPol. Ind. Riu Clar\nTarragona, España", 10, 42);
-
-    doc.setFont("helvetica", "bold");
-    doc.text("DESTINATARIO:", 70, 35);
-    doc.setFont("helvetica", "normal");
-    doc.text(`${order.customer}\nDirección del cliente\nCiudad, País`, 70, 42);
-
-    doc.line(10, 65, 138, 65);
-
-    doc.setFont("courier", "normal");
-    doc.setFontSize(22);
-    doc.text(`*${order.number}*`, 74, 80, { align: 'center' });
-
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 95);
-
-    doc.save(`Envio_${order.number}.pdf`);
+    generateShippingLabelPdf(order, `Envio_${order.number}.pdf`);
   };
 
   // === EXCEL SYNC LOGIC ===
@@ -168,50 +90,42 @@ import AutoCrud from '../components/AutoCrud';
   const fileImport = document.getElementById('input-import-excel-orders') as HTMLInputElement;
 
   btnExport.addEventListener('click', () => {
-    if(!window.XLSX) return alert("SheetJS no está cargado.");
     const orders = useOrdersStore.getState().items;
-    const ws = window.XLSX.utils.json_to_sheet(orders.map(o => ({
-      ID_Pedido: o.number,
-      Cliente: o.customer,
-      Estado: o.status,
-      Importe: o.amount
-    })));
-    const wb = window.XLSX.utils.book_new();
-    window.XLSX.utils.book_append_sheet(wb, ws, "Pedidos CRM");
-    window.XLSX.writeFile(wb, `Pedidos_${new Date().toISOString().split('T')[0]}.xlsx`);
+    exportRowsToExcel(
+      `Pedidos_${new Date().toISOString().split('T')[0]}.xlsx`,
+      'Pedidos CRM',
+      orders.map(o => ({
+        ID_Pedido: o.number,
+        Cliente: o.customer,
+        Estado: o.status,
+        Importe: o.amount
+      }))
+    );
   });
 
   btnImport.addEventListener('click', () => fileImport.click());
 
-  fileImport.addEventListener('change', (e) => {
+  fileImport.addEventListener('change', async (e) => {
     const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      try {
-        if(!window.XLSX) return alert("SheetJS no está cargado.");
-        const data = evt.target.result;
-        const workbook = window.XLSX.read(data, { type: 'binary' });
-        const ws = workbook.Sheets[workbook.SheetNames[0]];
-        const json = window.XLSX.utils.sheet_to_json(ws);
-        const store = useOrdersStore.getState();
+    if (!file) return;
+    try {
+      const json = await readExcelFile(file);
+      const store = useOrdersStore.getState();
 
-        json.forEach((row: any) => {
-          if (row.ID_Pedido) {
-            store.addItem({
-              customer: row.Cliente || 'Sin nombre',
-              status: row.Estado || 'pending',
-              amount: parseFloat(row.Importe) || 0
-            });
-          }
-        });
-        alert('Pedidos importados exitosamente.');
-      } catch (err) {
-        alert('Error importando el Excel.');
-      }
-      fileImport.value = '';
-    };
-    reader.readAsBinaryString(file);
+      json.forEach((row) => {
+        if (row.ID_Pedido) {
+          store.addItem({
+            customer: row.Cliente || 'Sin nombre',
+            status: row.Estado || 'pending',
+            amount: parseFloat(row.Importe) || 0
+          });
+        }
+      });
+      alert('Pedidos importados exitosamente.');
+    } catch (err) {
+      alert('Error importando el Excel.');
+    }
+    fileImport.value = '';
   });
 
   // Chart setup

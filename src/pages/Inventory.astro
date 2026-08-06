@@ -32,9 +32,6 @@ import AutoCrud from '../components/AutoCrud';
     </button>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
   <!-- KPI Stat Cards -->
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-6">
     <article class="flex flex-col gap-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6">
@@ -128,6 +125,8 @@ import AutoCrud from '../components/AutoCrud';
 <script>
   import { useInventoryStore } from '../lib/stores';
   import { seedGenerators } from '../lib/stores';
+  import { generateExpeditionLabelsPdf } from '../infrastructure/printing/jsPdfLabelGenerator';
+  import { exportRowsToExcel, readExcelFile } from '../infrastructure/office/xlsx';
 
   // === Seed counters from any existing persisted data ===
   seedGenerators();
@@ -236,52 +235,11 @@ import AutoCrud from '../components/AutoCrud';
       labelsPrintedToday += totalLabelsToPrint;
       updateStats();
 
-      if (window.jspdf) {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a6' });
-        let isFirstPage = true;
+      const labels = [];
+      for (let i = 0; i < fullBoxes; i++) labels.push({ nutcode, desc: item.desc, qty: perBox, isPico: false });
+      if (pico > 0) labels.push({ nutcode, desc: item.desc, qty: pico, isPico: true });
 
-        const drawLabel = (qty, isPico) => {
-          if (!isFirstPage) doc.addPage();
-          isFirstPage = false;
-          doc.setLineWidth(1);
-          doc.rect(5, 5, 138, 95);
-          doc.setFontSize(16);
-          doc.setFont('helvetica', 'bold');
-          doc.text('ESINSA GASKET - ETIQUETA EXPEDICIÓN', 74, 15, { align: 'center' });
-          doc.setLineWidth(0.5);
-          doc.line(10, 20, 138, 20);
-          doc.setFontSize(22);
-          doc.setFont('helvetica', 'bold');
-          doc.text(nutcode, 10, 35);
-          doc.setFontSize(14);
-          doc.setFont('helvetica', 'normal');
-          doc.text(item.desc, 10, 45);
-          doc.setFont('courier', 'normal');
-          doc.setFontSize(30);
-          doc.text(`*${nutcode}*`, 10, 65);
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(28);
-          doc.text(`CANT: ${qty}`, 10, 85);
-          if (isPico) {
-            doc.setFillColor(0, 0, 0);
-            doc.rect(90, 75, 40, 15, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(16);
-            doc.text('PICO / EXTRA', 110, 85, { align: 'center' });
-            doc.setTextColor(0, 0, 0);
-          }
-          doc.setFontSize(10);
-          doc.setFont('helvetica', 'normal');
-          doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 10, 95);
-        };
-
-        for (let i = 0; i < fullBoxes; i++) drawLabel(perBox, false);
-        if (pico > 0) drawLabel(pico, true);
-        doc.save(`Esinsa_Etiquetas_${nutcode}_${Date.now()}.pdf`);
-      } else {
-        alert('Error: jsPDF no está cargado.');
-      }
+      generateExpeditionLabelsPdf(labels, `Esinsa_Etiquetas_${nutcode}_${Date.now()}.pdf`);
       alert(`Stock reducido en ${total} uds. PDF con ${totalLabelsToPrint} etiquetas descargado.`);
     }
   });
@@ -292,62 +250,56 @@ import AutoCrud from '../components/AutoCrud';
   const fileImport = document.getElementById('input-import-excel') as HTMLInputElement;
 
   btnExport.addEventListener('click', () => {
-    if (!window.XLSX) return alert('SheetJS no está cargado.');
     const items = useInventoryStore.getState().items;
-    const ws = window.XLSX.utils.json_to_sheet(items.map(i => ({
-      NUTCODE: i.nutcode,
-      Descripción: i.desc,
-      Tipo: i.type,
-      Ubicación: i.loc,
-      Stock: i.stock,
-    })));
-    const wb = window.XLSX.utils.book_new();
-    window.XLSX.utils.book_append_sheet(wb, ws, 'Inventario Esinsa');
-    window.XLSX.writeFile(wb, `Inventario_${new Date().toISOString().split('T')[0]}.xlsx`);
+    exportRowsToExcel(
+      `Inventario_${new Date().toISOString().split('T')[0]}.xlsx`,
+      'Inventario Esinsa',
+      items.map(i => ({
+        NUTCODE: i.nutcode,
+        Descripción: i.desc,
+        Tipo: i.type,
+        Ubicación: i.loc,
+        Stock: i.stock,
+      }))
+    );
   });
 
   btnImport.addEventListener('click', () => fileImport.click());
 
-  fileImport.addEventListener('change', (e) => {
+  fileImport.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      try {
-        if (!window.XLSX) return alert('SheetJS no está cargado.');
-        const workbook = window.XLSX.read(evt.target.result, { type: 'binary' });
-        const json = window.XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-        const store = useInventoryStore.getState();
-        let added = 0;
-        json.forEach((row) => {
-          const nutcode = row.NUTCODE || '';
-          if (!nutcode) return;
-          const existing = store.items.find(i => i.nutcode === nutcode);
-          if (existing) {
-            store.updateItem(existing.id, {
-              desc: row['Descripción'] || existing.desc,
-              stock: parseInt(row['Stock'] || existing.stock, 10),
-              loc: row['Ubicación'] || existing.loc,
-              type: row['Tipo'] || existing.type,
-            });
-          } else {
-            store.addItem({
-              desc: row['Descripción'] || '',
-              type: row['Tipo'] || 'Otro',
-              stock: parseInt(row['Stock'] || 0, 10),
-              loc: row['Ubicación'] || 'Sin asignar',
-            });
-            added++;
-          }
-        });
-        updateStats();
-        alert(`Sincronización completada. ${added} nuevas referencias añadidas.`);
-      } catch (err) {
-        console.error(err);
-        alert('Error importando el archivo Excel.');
-      }
-      fileImport.value = '';
-    };
-    reader.readAsBinaryString(file);
+    try {
+      const json = await readExcelFile(file);
+      const store = useInventoryStore.getState();
+      let added = 0;
+      json.forEach((row) => {
+        const nutcode = row.NUTCODE || '';
+        if (!nutcode) return;
+        const existing = store.items.find(i => i.nutcode === nutcode);
+        if (existing) {
+          store.updateItem(existing.id, {
+            desc: row['Descripción'] || existing.desc,
+            stock: parseInt(row['Stock'] || existing.stock, 10),
+            loc: row['Ubicación'] || existing.loc,
+            type: row['Tipo'] || existing.type,
+          });
+        } else {
+          store.addItem({
+            desc: row['Descripción'] || '',
+            type: row['Tipo'] || 'Otro',
+            stock: parseInt(row['Stock'] || 0, 10),
+            loc: row['Ubicación'] || 'Sin asignar',
+          });
+          added++;
+        }
+      });
+      updateStats();
+      alert(`Sincronización completada. ${added} nuevas referencias añadidas.`);
+    } catch (err) {
+      console.error(err);
+      alert('Error importando el archivo Excel.');
+    }
+    fileImport.value = '';
   });
 </script>

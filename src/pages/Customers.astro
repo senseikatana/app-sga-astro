@@ -112,6 +112,7 @@ import AutoCrud from '../components/AutoCrud';
 <script>
   import { useCustomersStore } from '../lib/stores';
   import { seedGenerators } from '../lib/stores';
+  import { exportRowsToExcel, readExcelFile } from '../infrastructure/office/xlsx';
 
   // Seed counters from any existing persisted data
   seedGenerators();
@@ -122,51 +123,43 @@ import AutoCrud from '../components/AutoCrud';
   const fileImport = document.getElementById('input-import-excel-customers') as HTMLInputElement;
 
   btnExport.addEventListener('click', () => {
-    if(!window.XLSX) return alert("SheetJS no está cargado.");
     const customers = useCustomersStore.getState().items;
-    const ws = window.XLSX.utils.json_to_sheet(customers.map(c => ({
-      Nombre: c.name,
-      Email: c.email,
-      Plan: c.plan,
-      Estado: c.status
-    })));
-    const wb = window.XLSX.utils.book_new();
-    window.XLSX.utils.book_append_sheet(wb, ws, "Clientes CRM");
-    window.XLSX.writeFile(wb, `Clientes_CRM_${new Date().toISOString().split('T')[0]}.xlsx`);
+    exportRowsToExcel(
+      `Clientes_CRM_${new Date().toISOString().split('T')[0]}.xlsx`,
+      'Clientes CRM',
+      customers.map(c => ({
+        Nombre: c.name,
+        Email: c.email,
+        Plan: c.plan,
+        Estado: c.status
+      }))
+    );
   });
 
   btnImport.addEventListener('click', () => fileImport.click());
 
-  fileImport.addEventListener('change', (e) => {
+  fileImport.addEventListener('change', async (e) => {
     const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      try {
-        if(!window.XLSX) return alert("SheetJS no está cargado.");
-        const data = evt.target.result;
-        const workbook = window.XLSX.read(data, { type: 'binary' });
-        const ws = workbook.Sheets[workbook.SheetNames[0]];
-        const json = window.XLSX.utils.sheet_to_json(ws);
-        const store = useCustomersStore.getState();
+    if (!file) return;
+    try {
+      const json = await readExcelFile(file);
+      const store = useCustomersStore.getState();
 
-        json.forEach((row: any) => {
-          if (row.Nombre || row.Email) {
-            store.addItem({
-              name: row.Nombre || 'Sin nombre',
-              email: row.Email || 'Sin email',
-              plan: row.Plan || 'Starter',
-              status: row.Estado || 'active'
-            });
-          }
-        });
-        alert('Clientes importados exitosamente.');
-      } catch (err) {
-        alert('Error importando el Excel.');
-      }
-      fileImport.value = '';
-    };
-    reader.readAsBinaryString(file);
+      json.forEach((row) => {
+        if (row.Nombre || row.Email) {
+          store.addItem({
+            name: row.Nombre || 'Sin nombre',
+            email: row.Email || 'Sin email',
+            plan: row.Plan || 'Starter',
+            status: row.Estado || 'active'
+          });
+        }
+      });
+      alert('Clientes importados exitosamente.');
+    } catch (err) {
+      alert('Error importando el Excel.');
+    }
+    fileImport.value = '';
   });
 
   // Chart setup
